@@ -1,0 +1,43 @@
+!!!
+/
+  Originally design by Free CSS Templates
+  http://www.freecsstemplates.org
+  Released for free under a Creative Commons Attribution 2.5 License
+%html
+  %head
+    %meta(name="keywords" content="recruitment manange nurun")
+    %meta(name="description" content="A recruitment management system for nurun.com")
+    %meta(http-equiv="content-type" content="text/html; charset=utf-8")
+    %title= i18n.title
+    = yield_content :head
+  %body
+    #wrapper
+      #header
+        #logo
+          %h1= link_to i18n.nurun, "http://www.nurun.com"
+          %p= link_to i18n.RMS, url_for('/')
+        #search
+          %form{:method => "get", :action => url_for('/search')}
+            %fieldset
+              %input#search-text(type="text" name="s" size="15")
+              %input#search-submit(type="submit" value="Search")
+      #menu
+        %ul
+          %li.current_page_item
+            = link_to i18n.home, url_for('/')
+          %li
+            = link_to i18n.position.tab, url_for('/positions')
+          %li
+            = link_to i18n.profile.tab, url_for('/profiles')
+          %li
+            = link_to i18n.help, url_for('/help')
+      #page
+        #page-bgtop
+          #page-bgbtm
+            #content
+              = yield
+            #sidebar
+              = yield_content :sidebar
+            .clear-float &nbsp;
+    #footer
+      %p= i18n.copyright('2009', link_to(i18n.nurun, "http://www.nurun.com"))

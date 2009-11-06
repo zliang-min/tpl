@@ -1,0 +1,11 @@
+*.swp
+.*
+!.gitignore
+log/*
+tmp
+public/stylesheets
+config/database.yml
+db/schema.rb
+script/gems
+vendor/bundled_gems/*
+!vendor/bundled_gems/cache
