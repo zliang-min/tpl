@@ -1,8 +1,8 @@
 clear_sources
-#bundle_path "vendor/bundled_gems"
+bundle_path "vendor/bundled_gems"
 
-source "http://gemcutter.org"
-#source "http://gems.rubyforge.org"
+#source "http://gemcutter.org"
+source "http://gems.rubyforge.org"
 source "http://gems.github.com"
 
 disable_system_gems
@@ -14,7 +14,7 @@ gem 'rails', '2.3.4'
 gem 'compass', '>= 0.8.17'
 
 gem 'mysql', except: :test
-gem 'matthuhiggins-foreigner', '>= 0.2.1', require_as: 'foreigner', only: :install
+#gem 'matthuhiggins-foreigner', '>= 0.2.1', require_as: 'foreigner', only: :install
 gem 'state_machine', '>= 0.8.0'
 
 gem 'haml', '>= 2.2.10'

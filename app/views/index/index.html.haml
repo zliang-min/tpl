@@ -1,0 +1,23 @@
+- content_for :head do
+  = stylesheet_link_tag 'default', :media => 'screen'
+
+:ruby
+  sidebar [
+    ['inbox', 'Hello world'],
+    ['categories',
+      [
+        ["Aliquam libero", "#"],
+        ["Aliquam libero", "#"],
+        ["Aliquam libero", "#"],
+        ["Aliquam libero", "#"]
+      ]
+    ], # categories
+    ['archives',
+      [
+        ["Aliquam libero", "#"],
+        ["Aliquam libero", "#"],
+        ["Aliquam libero", "#"],
+        ["Aliquam libero", "#"]
+      ]
+    ] # archives
+  ] # sidebar

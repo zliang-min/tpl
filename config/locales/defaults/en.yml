@@ -1,0 +1,9 @@
+---
+en:
+# Follow alphabet order
+  description: description
+  name: name
+  nurun: nurun
+  state: state
+
+  RMS: Recruitment Management System

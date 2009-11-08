@@ -1,0 +1,10 @@
+- title, content = sidebar_box
+%li
+  %h2= title
+  - if content.respond_to?(:to_str)
+    %p= content.to_str
+  - else
+    %ul
+      - content.each do |text, link, options|
+        %li
+          = link_to text, link, options
