@@ -9,4 +9,3 @@ en:
       create_position: Create a position
       need: need
       no_positions: We have no positions yet. Click {{new_link}} to create one.
-      tools: tools

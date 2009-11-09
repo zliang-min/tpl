@@ -1,9 +1,22 @@
 ---
 en:
 # Follow alphabet order
+  copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.
   description: description
+  feedback: FeedBack
+  help: help
+  here: here
+  home: home
   name: name
   nurun: nurun
+  operations: operations
+  shortcuts: shortcuts
   state: state
+  title: RMS - Recruitment Management System
+  tools: tools
 
   RMS: Recruitment Management System
+
+  menu:
+    positions: positions
+    profiles: profiles

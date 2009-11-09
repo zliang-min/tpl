@@ -1,8 +1,8 @@
 clear_sources
 bundle_path "vendor/bundled_gems"
 
-#source "http://gemcutter.org"
-source "http://gems.rubyforge.org"
+source "http://gemcutter.org"
+#source "http://gems.rubyforge.org"
 source "http://gems.github.com"
 
 disable_system_gems

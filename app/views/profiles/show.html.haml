@@ -1,0 +1,41 @@
+- #---------------------------------------- head
+- content_for :head do
+  = stylesheet_link_tag "default"
+  - link_jqueryui_stylesheet 'humanity'
+  - javascript_include_tag 'profiles/index'
+  - include_google_jsapi jquery: '1.3', jqueryui: '1.7'
+
+- #---------------------------------------- sidebar
+:ruby
+  shortcuts = []
+  shortcuts << ['back', position_profiles_path(@profile.position)]
+
+  if p = @profile.previous_one
+    shortcuts << ['previous profile', profile_path(p)]
+  else
+    shortcuts << ['previous profile', nil, {:disabled => true}]
+  end
+
+  if p = @profile.next_one
+    shortcuts << ['next profile', profile_path(p)]
+  else
+    shortcuts << ['next profile', nil, {:disabled => true}]
+  end
+
+  sidebar t(:shortcuts) => shortcuts
+
+- #---------------------------------------- content
+.profile
+  %h2= t '.profile'
+  #details
+    %ul
+      %li Name: #{@profile.name}
+      %li State: #{@profile.state}
+  .feedbacks
+    %h3= t '.feedbacks'
+    - if @profile.feedbacks.empty?
+      %p= t '.no_feedbacks'
+    - else
+      %ul
+        - @profile.feedbacks.each do |feedback|
+          %li= feedback.content

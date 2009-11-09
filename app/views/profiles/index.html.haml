@@ -1,0 +1,60 @@
+- #---------------------------------------- head
+- content_for :head do
+  = stylesheet_link_tag "profiles/index"
+  = link_jqueryui_stylesheet 'humanity'
+  = javascript_include_tag 'profiles/index'
+  = include_google_jsapi jquery: '1.3', jqueryui: '1.7'
+
+- #---------------------------------------- sidebar
+- sidebar t('tools') => [[t('.add'), new_profile_path, {:class => 'dialog-switch', 'data-dialog' => 'profile-form'}]]
+
+- #---------------------------------------- content
+.position
+  %h2 Position: #{@position.name}
+  .summary
+    %ul
+      %li Category: #{@position.category.name}
+      - unless @position.description
+        %li= @position.description
+      %li State: #{@position.state}
+
+%h3 Profiles
+%table#profile-table
+  %thead
+    %tr
+      %th.name= t :name
+      %th.state= t :state
+      %th.operations= t :operations
+  %tbody
+    - @profiles.each do |profile|
+      %tr{:id => "profile-#{profile.id}"}
+        %td= link_to h(profile.name), profile_path(profile)
+        %td&= profile.state
+        %td
+          %ul
+            - profile.state_events.each do |event|
+              %li= link_to event, handle_profile_path(:id => profile.id, :event => event), :class => 'event'
+- if @profiles.empty?
+  %p.notice= t('.none')
+
+- #---------------------------------------- dialogs
+#profile-form.dialog{'data-dialog-title' => t('.title'), 'data-dialog-width' => 900, 'data-dialog-height' => 500}
+  - form_for Profile.new do |f|
+    %table
+      %tbody
+        %tr
+          %td
+            = f.label :name, t(:name)
+          %td
+            = f.text_field :name
+            = f.hidden_field :position_id, :value => @position.id
+        - f.fields_for :feedbacks, Feedback.new do |feedback_fields|
+          %tr
+            %td
+              = feedback_fields.label :content, t(:feedback)
+            %td
+              = feedback_fields.text_area :content
+
+#feedback-form.dialog{'data-dialog-title' => t('.feedback'), 'data-dialog-width' => 500, 'data-dialog-height' => 500}
+  - form_for Feedback.new do |f|
+    = f.text_area :content

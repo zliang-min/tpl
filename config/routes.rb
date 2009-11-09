@@ -1,6 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :feedbacks
   map.resources :profiles
-  map.resources :positions, :only => [:index, :new, :create]
+  map.handle_profile '/profiles/:id/:event', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }
+  map.handle_profile_with_format '/profiles/:id/:event.:format', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }
+
+  map.resources :positions, :only => [:index, :new, :create] do |r|
+    r.resources :profiles
+  end
+
   map.resources :categories, :only => [:create]
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -7,4 +7,7 @@
     %ul
       - content.each do |text, link, options|
         %li
-          = link_to text, link, options
+          - if options and options.delete(:disabled)
+            = text
+          - else
+            = link_to text, link, options

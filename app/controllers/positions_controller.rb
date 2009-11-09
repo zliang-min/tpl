@@ -14,16 +14,27 @@ class PositionsController < ApplicationController
   # POST /positions
   # POST /positions.json
   def create
-    @position = Position.new(params[:position])
+    category = Category.find_by_id params[:position].delete(:category)
+    position = Position.new params[:position]
+    position.category = category
 
     respond_to do |format|
-      if @position.save
-        flash[:notice] = 'Position was successfully created.'
-        format.html { redirect_to(@position) }
-        format.json  { render :json => @position, :status => :created, :location => @position }
+      if position.save
+        format.json  {
+          render(
+            json: {
+              position: position.attributes.merge(
+                category: position.category.attributes,
+                state: position.state,
+                profiles_link: position_profiles_path(position)
+              )
+            },
+            #json: position.to_json(include: :category, methods: :state),
+            status: :created
+          )
+        }
       else
-        format.html { render :action => "new" }
-        format.json  { render :json => @position.errors, :status => :unprocessable_entity }
+        format.json  { render :json => position.errors, :status => :unprocessable_entity }
       end
     end
   end

@@ -13,6 +13,12 @@ var onLoadCallback = (function() {
       dialog('option', 'width', d.attr('data-dialog-width')).
       dialog('option', 'modal', d.hasClass('modal'));
     });
+
+    $('.dialog-switch').click(function(event) {
+      event.preventDefault();
+      $('#' + $(this).attr('data-dialog')).dialog('open');
+      return false;
+    });
   }
 
   function submitForm() {
@@ -28,7 +34,7 @@ var onLoadCallback = (function() {
         dataType: 'json',
         data: $(this).serialize(),
         success: options.onSuccess,
-        error: function(req, text) { alert(errorMsg(req)) }
+        error: ( options.onError || function(req, text) { alert(errorMsg(req)) } )
       });
       return false;
     });
@@ -50,59 +56,60 @@ var onLoadCallback = (function() {
   }
 
   function handleFormSubmit() {
-    _handleFormSubmit($('#category-form').find('form'), {
-      onSuccess: function(data) {
-        data = data.category;
-        $('<option/>').attr('value', data.id).attr('selected', 'selected').
-          text(data.name).appendTo(
-            $('#position-form').find('select[name=position[category]]')
-          );
-        $('#category-form').dialog('close');
-      }
-    });
-    _handleFormSubmit($('#position-form').find('form'), {
+    _handleFormSubmit($('#profile-form').find('form'), {
       onSuccess: function(data) {
         $('p.notice').remove();
-        addPosition(data.position);
-        $('#position-form').dialog('close');
+        addProfile(data.profile);
+        $('#profile-form').dialog('close');
       }
     });
-  }
 
-  function activeLinks() {
-    $.each(['position', 'category'], function() {
-      var name = this;
-      $('a.button-link-add-' + name).click(function(event) {
-        event.preventDefault();
-        $('#' + name + '-form').dialog('open');
-        return false;
-      });
+    _handleFormSubmit($('#feedback-form').find('form'), {
+      onSuccess: function(data) {
+        changeProfileEvent(data);
+        $('#feedback-form').dialog('close');
+      },
+      onError: function(req, text) { alert("Sorry, operation failed. Please try it later.") }
     });
   }
 
-  function addPosition(object) {
+  function addProfile(object) {
     var tr = $('<tr/>');
-    $('<td/>').text(object.category.name).appendTo(tr);
     $('<td/>').text(object.name).appendTo(tr);
-    $('<td/>').text(object.description).appendTo(tr);
     $('<td/>').text(object.state).appendTo(tr);
-    $('<a/>').attr('href', object.profiles_link).text('profiles').appendTo(
-      $('<td/>').appendTo(tr)
-    );
-    tr.appendTo($('#position-table').find('tbody'));
+    tr.appendTo($('#profile-table').find('tbody'));
   }
 
-  function makeClickableTable() {
+  function setupTable() {
     $('tbody tr').live('hover',
         function() { $(this).addClass('hover') },
         function() { $(this).removeClass('hover') }
     );
+
+    $('#profile-table .event').live('click', function(event) {
+      event.preventDefault();
+      $('#feedback-form').find('form').attr('action', this.href).end().dialog('open');
+      return false;
+    });
+  }
+
+  function changeProfileEvent(data) {
+    data = data.profile;
+    var ul = $('#profile-' + data.id).children('td').
+      eq(1).text(data.state).end().
+      eq(2).children('ul');
+    ul.children().remove();
+    $.each(data.events, function() {
+      $('<a/>').addClass('event').attr('href', this.url).
+        text(this.name).appendTo(
+          $('<li/>').appendTo(ul)
+        );
+    });
   }
 
   return function() {
     enableDialogs();
     handleFormSubmit();
-    activeLinks();
-    makeClickableTable();
+    setupTable();
   }
 })();

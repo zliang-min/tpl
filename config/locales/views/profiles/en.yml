@@ -1,0 +1,12 @@
+---
+en:
+  profiles:
+    index:
+      add: Add a new profile
+      feedback: Feedback
+      none: There are no profiles for this position yet.
+      title: Create a profile
+    show:
+      feedbacks: Feedbacks
+      no_feedbacks: There is no feedbacks for this profile yet.
+      profile: Profile
