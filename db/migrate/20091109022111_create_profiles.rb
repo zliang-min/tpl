@@ -3,6 +3,7 @@ class CreateProfiles < ActiveRecord::Migration
     create_table :profiles do |t|
       t.string :name, :null => false
       t.string :state
+      t.integer :profile_logs_count
 
       t.references :position
 

@@ -14,12 +14,25 @@ class ProfilesController < ApplicationController
   # POST /profiles
   # POST /profiles.json
   def create
-    profile = Profile.new params[:profile]
-    profile.position = @position
+    profile = Profile.add params[:profile]
 
     respond_to do |format|
       if profile.save
-        format.json  { render json: profile, status: :created }
+        format.json  {
+          render(
+            json: {
+              profile: {
+                id: profile.id,
+                name: profile.name,
+                show_link: profile_path(profile),
+                state: profile.state,
+                events: profile.state_events.map do |e|
+                  { name: e, url: handle_profile_path(:id => profile.id, :event => e) }
+                end
+              }
+            }, status: :created
+          )
+        }
       else
         format.json  { render :json => profile.errors, :status => :unprocessable_entity }
       end
@@ -28,7 +41,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/:id
   def show
-    @profile = Profile.find params[:id], :include => [:position, :feedbacks]
+    @profile = Profile.find params[:id], :include => [:position, {:logs => :feedback}]
   end
 
   # POST /profiles/:id/:event
@@ -36,13 +49,10 @@ class ProfilesController < ApplicationController
   def handle
     profile = Profile.find(params[:id])
 
-    feedback_content = params[:feedback][:content].strip
-    unless feedback_content.blank?
-      profile.feedbacks.build :content => feedback_content
-    end
+    feedback = params[:feedback][:content].strip
 
     respond_to do |format|
-      if profile.fire_events(params[:event].to_sym)
+      if profile.trigger params[:event], feedback
         format.json {
           render json: {
             profile: {

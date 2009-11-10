@@ -32,10 +32,12 @@
       %li Name: #{@profile.name}
       %li State: #{@profile.state}
   .feedbacks
-    %h3= t '.feedbacks'
-    - if @profile.feedbacks.empty?
-      %p= t '.no_feedbacks'
-    - else
-      %ul
-        - @profile.feedbacks.each do |feedback|
-          %li= feedback.content
+    %h3= t '.log'
+    %dl
+      - @profile.logs.each do |log|
+        %dt= log.action
+        %dd
+          - if log.feedback.blank?
+            = t '.no_feedbacks'
+          - else
+            &= log.feedback.content

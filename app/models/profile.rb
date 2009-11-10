@@ -1,6 +1,6 @@
 class Profile < ActiveRecord::Base
 
-  validates_presence_of :name, :position
+  validates_presence_of :name, :position_id
   validates_length_of :name, :maximum => 255
 
   belongs_to :position
@@ -45,14 +45,21 @@ class Profile < ActiveRecord::Base
   end
 
   def self.add options = {}
-    feedback = options.delete(:feedback)
-    feedback.strip! if feedback
+    feedback = options.delete(:feedbacks)
+    feedback[:content].strip! if feedback
 
     profile = self.new(options)
     log = profile.logs.build :action => 'add'
-    log.build_feedback :content => feedback unless feedback.blank?
+    log.build_feedback :content => feedback[:content] unless feedback[:content].blank?
 
-    profile.save
+    profile
+  end
+
+  def trigger event, feedback = nil
+    log = logs.build :action => event
+    feedback.strip! if feedback
+    log.build_feedback :content => feedback unless feedback.blank?
+    fire_events event.to_sym
   end
 
   def previous_one

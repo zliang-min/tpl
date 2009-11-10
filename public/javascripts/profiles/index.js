@@ -52,7 +52,9 @@ var onLoadCallback = (function() {
     $.each(error, function() {
       msg.push(this.join(' '))
     });
-    return msg.join("\n");
+    msg = msg.join("\n");
+    if( msg == '' ) msg = "Error occured. Please try it later.";
+    return msg;
   }
 
   function handleFormSubmit() {
@@ -74,10 +76,29 @@ var onLoadCallback = (function() {
   }
 
   function addProfile(object) {
-    var tr = $('<tr/>');
-    $('<td/>').text(object.name).appendTo(tr);
+    var tr = $('<tr/>').attr('id', 'profile-' + object.id);
+    $('<a/>').attr('href', object.show_link).text(object.name).
+      appendTo( $('<td/>').appendTo(tr) );
     $('<td/>').text(object.state).appendTo(tr);
+    createProfileEventLinks( $('<td/>').appendTo(tr), object.events );
     tr.appendTo($('#profile-table').find('tbody'));
+  }
+
+  function createProfileEventLinks(td, events) {
+    td = $(td);
+    if( td.is(':has(ul)') ) {
+      ul = td.children('ul');
+      ul.children().remove();
+    } else {
+      ul = $('<ul/>').appendTo(td);
+    }
+
+    $.each(events, function() {
+      $('<a/>').addClass('event').attr('href', this.url).
+        text(this.name).appendTo(
+          $('<li/>').appendTo(ul)
+        );
+    });
   }
 
   function setupTable() {
@@ -95,16 +116,9 @@ var onLoadCallback = (function() {
 
   function changeProfileEvent(data) {
     data = data.profile;
-    var ul = $('#profile-' + data.id).children('td').
-      eq(1).text(data.state).end().
-      eq(2).children('ul');
-    ul.children().remove();
-    $.each(data.events, function() {
-      $('<a/>').addClass('event').attr('href', this.url).
-        text(this.name).appendTo(
-          $('<li/>').appendTo(ul)
-        );
-    });
+    var tds = $('#profile-' + data.id).children('td');
+    tds.eq(1).text(data.state).end();
+    createProfileEventLinks(tds.eq(2), data.events);
   }
 
   return function() {

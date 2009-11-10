@@ -9,10 +9,10 @@ class Position < ActiveRecord::Base
 
   before_create :initialize_need
 
-  def state; '0/0' end
+  def state; '%d/%d' % [filled, need] end
 
   private
   def initialize_need
-    self.need = 0
+    self.need = 0 unless self.need
   end
 end
