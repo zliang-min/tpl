@@ -1,9 +1,6 @@
 - #---------------------------------------- head
 - content_for :head do
-  = stylesheet_link_tag "default"
-  - link_jqueryui_stylesheet 'humanity'
-  - javascript_include_tag 'profiles/index'
-  - include_google_jsapi jquery: '1.3', jqueryui: '1.7'
+  = stylesheet_link_tag "profiles/show"
 
 - #---------------------------------------- sidebar
 :ruby
@@ -13,16 +10,26 @@
   if p = @profile.previous_one
     shortcuts << ['previous profile', profile_path(p)]
   else
-    shortcuts << ['previous profile', nil, {:disabled => true}]
+    shortcuts << 'previous profile'
   end
 
   if p = @profile.next_one
     shortcuts << ['next profile', profile_path(p)]
   else
-    shortcuts << ['next profile', nil, {:disabled => true}]
+    shortcuts << 'next profile'
   end
 
-  sidebar t(:shortcuts) => shortcuts
+  cv = if @profile.cv.exists?
+         link_to @profile.cv.original_filename, @profile.cv.url
+       else
+         t('.no_cv')
+       end
+
+  sidebar [
+    [t(:shortcuts), shortcuts],
+    [t(:picture), [sidebar_picture_for(@profile)]],
+    [t(:CV), cv]
+  ]
 
 - #---------------------------------------- content
 .profile

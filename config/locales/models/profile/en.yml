@@ -1,0 +1,8 @@
+---
+en:
+  profile:
+    errors:
+      picture:
+        content_type: only allows jpg, jpeg, png, gif and bmp images.
+      cv:
+        content_type: only allows doc, pdf, txt and html documents.

@@ -9,8 +9,8 @@ var onLoadCallback = (function() {
     }).each(function() {
       var d = $(this);
       d.dialog('option', 'title', d.attr('data-dialog-title')).
-      dialog('option', 'height', d.attr('data-dialog-height')).
       dialog('option', 'width', d.attr('data-dialog-width')).
+      dialog('option', 'height', d.attr('data-dialog-height')).
       dialog('option', 'modal', d.hasClass('modal'));
     });
 

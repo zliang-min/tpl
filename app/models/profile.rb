@@ -7,7 +7,15 @@ class Profile < ActiveRecord::Base
   has_many :logs, :class_name => 'ProfileLog', :order => 'id'
   has_many :feedbacks, :through => :logs
 
-  #accepts_nested_attributes_for :feedbacks
+  has_attached_file :picture
+  validates_attachment_content_type :picture,
+    :content_type => %r'image/(jpeg|png|gif|bmp)',
+    :message => I18n.t('profile.errors.picture.content_type')
+
+  has_attached_file :cv
+  validates_attachment_content_type :cv,
+    :content_type => [%r'application/(msword|pdf)', %r'text/(plain|html)'],
+    :message => I18n.t('profile.errors.cv.content_type')
 
   state_machine :initial => :new do
     after_transition do |profile, trans|

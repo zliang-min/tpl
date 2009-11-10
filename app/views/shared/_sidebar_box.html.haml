@@ -6,8 +6,7 @@
   - else
     %ul
       - content.each do |text, link, options|
-        %li
-          - if options and options.delete(:disabled)
-            = text
-          - else
-            = link_to text, link, options
+        - if options.nil? && ( link.nil? || link.is_a?(Hash) )
+          = content_tag 'li', text, link
+        - else
+          %li= link_to text, link, options

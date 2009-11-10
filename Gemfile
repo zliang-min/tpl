@@ -8,18 +8,16 @@ source "http://gems.github.com"
 disable_system_gems
 
 gem 'rack', '>= 1.0.1'
-
 gem 'rails', '2.3.4'
-
 gem 'compass', '>= 0.8.17'
-
 gem 'mysql', except: :test
 #gem 'matthuhiggins-foreigner', '>= 0.2.1', require_as: 'foreigner', only: :install
 gem 'state_machine', '>= 0.8.0'
-
 gem 'haml', '>= 2.2.10'
+gem 'mime-types', '>= 1.16', :require_as => 'mime/types'
 
-#gem 'json', '~> 1.1.9'
+gem 'activerecord', '2.3.4' # required or paperclip cannot find ActiveRecord!!
+gem 'thoughtbot-paperclip', '>= 2.3.1', :require_as => 'paperclip'#, :only => :load_in_environment
 
 only :test do
   gem 'sqlite3-ruby', '>= 1.2.5', require_as: 'sqlite3'

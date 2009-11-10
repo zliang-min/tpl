@@ -1,0 +1,50 @@
+- #---------------------------------------- head
+- content_for :head do
+  = stylesheet_link_tag "profiles/new"
+  = javascript_include_tag 'profiles/new'
+  = include_google_jsapi jquery: '1.3'
+
+- #---------------------------------------- sidebar
+- content_for :sidebar do
+  #sidebar
+    - form_for @profile, :html => {:multipart => true, :id => 'real-form'} do |f|
+      %ul
+        %li
+          %h2= t :tools
+          %ul
+            %li= link_to t(:save), profiles_path, :id => 'tool-save'
+            %li= link_to t(:cancel), position_profiles_path(@position)
+        %li
+          %h2= t :picture
+          %ul
+            %li.picture= image_tag 'blue_ghost.jpg'
+            %li= f.file_field :picture, :class => 'short'
+        %li
+          %h2= t :CV
+          %ul
+            %li= f.file_field :cv, :class => 'short'
+      = f.hidden_field :name, :class => 'copy-cat'
+      = f.hidden_field :position_id, :value => @position.id
+      - f.fields_for :feedbacks, Feedback.new do |fb|
+        = fb.hidden_field :content, :class => 'copy-cat'
+
+- #---------------------------------------- content
+#profile
+  %h2 Position: #{@position.name}
+  - form_for @profile, :html => {:id => 'fake-form'} do |f|
+    %fieldset
+      %legend= t '.details'
+      = f.error_messages
+      %table
+        %tbody
+          %tr
+            %td
+              = f.label :name, t(:name)
+            %td
+              = f.text_field :name
+          - f.fields_for :feedbacks, Feedback.new do |feedback_fields|
+            %tr
+              %td
+                = feedback_fields.label :content, t(:feedback)
+              %td
+                = feedback_fields.text_area :content, :class => 'feedback'

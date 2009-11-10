@@ -1,20 +1,24 @@
 ---
 en:
 # Follow alphabet order
+  cancel: cancel
   copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.
   description: description
-  feedback: FeedBack
+  feedback: Feedback
   help: help
   here: here
   home: home
   name: name
   nurun: nurun
   operations: operations
+  picture: picture
+  save: save
   shortcuts: shortcuts
   state: state
   title: RMS - Recruitment Management System
   tools: tools
 
+  CV: CV
   RMS: Recruitment Management System
 
   menu:

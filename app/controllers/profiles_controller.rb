@@ -11,6 +11,11 @@ class ProfilesController < ApplicationController
                 end
   end
 
+  # GET /profiles/new
+  def new
+    @profile = Profile.new
+  end
+
   # POST /profiles
   # POST /profiles.json
   def create
@@ -18,7 +23,9 @@ class ProfilesController < ApplicationController
 
     respond_to do |format|
       if profile.save
-        format.json  {
+        format.html { redirect_to position_profiles_path(profile.position) }
+
+        format.json {
           render(
             json: {
               profile: {
@@ -34,7 +41,8 @@ class ProfilesController < ApplicationController
           )
         }
       else
-        format.json  { render :json => profile.errors, :status => :unprocessable_entity }
+        format.html { @profile = profile; render :action => 'new' }
+        format.json { render :json => profile.errors, :status => :unprocessable_entity }
       end
     end
   end
