@@ -10,6 +10,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :categories, :only => [:create]
 
+  map.devise_for :users
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
