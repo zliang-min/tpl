@@ -1,5 +1,8 @@
 class IndexController < ApplicationController
 
-  def index; end
+  def index
+    @categories = Category.all(:select => 'name', :order => 'name')
+    @operations = Operation.all(:order => 'id DESC', :limit => 20)
+  end
 
 end

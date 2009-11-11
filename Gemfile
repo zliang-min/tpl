@@ -15,6 +15,7 @@ gem 'mysql', except: :test
 gem 'state_machine', '>= 0.8.0'
 gem 'haml', '>= 2.2.10'
 gem 'mime-types', '>= 1.16', :require_as => 'mime/types'
+gem 'bluecloth', '>= 2.0.5'
 
 gem 'activerecord', '2.3.4' # required or paperclip cannot find ActiveRecord!!
 gem 'thoughtbot-paperclip', '>= 2.3.1', :require_as => 'paperclip'#, :only => :load_in_environment

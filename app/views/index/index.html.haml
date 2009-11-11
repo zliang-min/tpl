@@ -4,20 +4,10 @@
 :ruby
   sidebar [
     ['inbox', 'Hello world'],
-    ['categories',
-      [
-        ["Aliquam libero", "#"],
-        ["Aliquam libero", "#"],
-        ["Aliquam libero", "#"],
-        ["Aliquam libero", "#"]
-      ]
-    ], # categories
-    ['archives',
-      [
-        ["Aliquam libero", "#"],
-        ["Aliquam libero", "#"],
-        ["Aliquam libero", "#"],
-        ["Aliquam libero", "#"]
-      ]
-    ] # archives
+    ['categories', @categories.map { |c| c.name }]
   ] # sidebar
+
+%h2 Recent Activities
+%ul
+  - @operations.each do |op|
+    %li= parse_event op.event

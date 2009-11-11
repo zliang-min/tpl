@@ -4,7 +4,7 @@ class Profile < ActiveRecord::Base
   validates_length_of :name, :maximum => 255
 
   belongs_to :position
-  has_many :logs, :class_name => 'ProfileLog', :order => 'id'
+  has_many :logs, :class_name => 'ProfileLog', :order => 'id', :dependent => :destroy
   has_many :feedbacks, :through => :logs
 
   has_attached_file :picture
@@ -17,11 +17,9 @@ class Profile < ActiveRecord::Base
     :content_type => [%r'application/(msword|pdf)', %r'text/(plain|html)'],
     :message => I18n.t('profile.errors.cv.content_type')
 
-  state_machine :initial => :new do
-    after_transition do |profile, trans|
-      profile.logs.last.action = trans.event
-    end
+  before_update :memorize_changes
 
+  state_machine :initial => :new do
     # *WARNING* Don't use 'any' nor 'all' in the _from_ part of a transition. Because state_events cannot see that kinds of events.
     event :reject do
       transition [:new, :interview, :pending] => :rejected
@@ -76,6 +74,26 @@ class Profile < ActiveRecord::Base
 
   def next_one
     self.class.first :conditions => ['id > ?', id], :order => 'id'
+  end
+
+  # For operation record
+  def event which
+    profile = "[#{name}]({{profile_path #{id}}})"
+    case which
+    when :created
+      %Q^A new profile #{profile} has been added to [#{position.name}]({{position_profiles_path #{position.id}}})(#{position.category.name}) at #{I18n.l created_at, :format => :short}.^
+    when :updated
+      if @changes_before_update.has_key?('state')
+        %Q^Profile #{profile} has been #{state} at #{I18n.l(updated_at, :format => :short)}.^
+      else
+        %Q^Profile #{profile} has been updated at #{I18n.l(updated_at, :format => :short)}.^
+      end
+    end
+  end
+
+  private
+  def memorize_changes
+    @changes_before_update = changes
   end
 
 end
