@@ -3,12 +3,7 @@ class ProfilesController < ApplicationController
   before_filter :find_position
 
   def index
-    @profiles = if @position
-                  @position.profiles
-                else
-                  #Profile.all :order => :id
-                  render :nothing => true, :status => 406
-                end
+    @profiles = @position.profiles
   end
 
   # GET /profiles/new

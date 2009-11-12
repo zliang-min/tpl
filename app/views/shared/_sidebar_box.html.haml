@@ -4,7 +4,7 @@
   - if content.respond_to?(:to_str)
     %p= content.to_str
   - else
-    %ul
+    %ul.compact
       - content.each do |text, link, options|
         - if options.nil? && ( link.nil? || link.is_a?(Hash) )
           = content_tag 'li', text, link

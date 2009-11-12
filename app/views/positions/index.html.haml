@@ -9,22 +9,38 @@
 - sidebar t('tools') => [[t('.add_position'), new_position_path, {class: 'button-link-add-position'}]]
 
 - #---------------------------------------- content
-%table#position-table
-  %thead
-    %tr
-      %th.category= t '.category'
-      %th.name= t :name
-      %th.description= t :description
-      %th.state= t :state
-      %th
-  %tbody
+%h2= t('.title')
+- #position-table
+#positions
+  %div
     - @positions.each do |position|
-      %tr
-        %td&= position.category.name
-        %td&= position.name
-        %td&= position.description
-        %td&= position.state
-        %td= link_to 'profiles', position_profiles_path(position)
+      %h3
+        %span.toggler= link_to_icon 'minimize', 'toggle', '#'
+        %span.text.name&= position.name
+        %span.text.category ( #{h position.category.name} )
+        %span.text.state= position.state
+        %span.tools
+          %ul.horizontal
+            %li= link_to_icon 'folder_files', t('.details'), position_profiles_path(position), :action_name => 'show'
+            %li= link_to_icon 'action_add', t('.add_profile'), new_position_profile_path(position), :action_name => 'add'
+      .clear-float
+      - unless position.profiles.blank?
+        .profiles
+          %table
+            %thead
+              %tr
+                %th= t :name
+                %th= t :state
+                %th= t :created_at
+                %th= t :operation
+            %tbody
+              - position.profiles.each_with_index do |profile, index|
+                - break if index > 4
+                %tr
+                  %td&= profile.name
+                  %td= profile.state
+                  %td= l profile.created_at, :format => :short
+                  %td= profile.state_events
 - if @positions.empty?
   %p.notice= t('.no_positions', :new_link => link_to(t(:here), new_position_path, class: 'button-link-add-position'))
 
@@ -35,14 +51,14 @@
       %tbody
         %tr
           %td
-            %label(for="position[category]")= t('.category')
+            %label(for="position[category]")= t('position.category')
           %td
             %select(name="position[category]")
               = options_from_collection_for_select @categories, 'id', 'name'
             = link_to "(#{t '.add'})", categories_path, class: 'button-link-add-category'
         %tr
           %td
-            %label(for="position[name]")= t :name
+            %label(for="position[name]")= t 'position.name'
           %td
             %input(type="text" name="position[name]")
         %tr
@@ -52,7 +68,7 @@
             %textarea(name="position[description]")
         %tr
           %td
-            %label(for="position[need]")= t '.need'
+            %label(for="position[need]")= t 'position.need'
           %td
             %input(type="text" name="position[need]")
 

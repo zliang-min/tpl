@@ -1,0 +1,58 @@
+// # Configurations
+!table_width = 100%
+!td_border_color = #FFFFFF
+!thead_th_background = #91c5d4
+!span_th_background = #66a9bd
+!tbody_th_background = #91c5d4
+!tbody_td_background = #d5eaf0
+!tfoot_th_background = #b0cc7f
+!tfoot_td_background = #d7e1c5
+
+// # style
+// ## first reset every thing
+table, caption, td, tr, th
+  margin: 0
+  padding: 0
+  font-weight: normal
+
+table
+  border-collapse: collapse
+  width = !table_width
+
+caption
+  font-size: 15px
+  padding-bottom: 10px
+  text-align: left
+
+th, td
+  border = 1px "solid" !td_border_color
+  border-width: 0 1px 1px 0
+  padding: 5px
+
+th
+  thead &
+    background = !thead_th_background
+    &[colspan], &[rowspan]
+      background = !span_th_background
+  tbody &
+    background = !tbody_th_background
+    text-align: left
+  tfoot &
+    background = !tfoot_th_background
+    font-weight: bold
+    text-align: left
+
+td
+  tbody &
+    background = !tbody_td_background
+    text-align: center
+  tfoot &
+    background = !tfoot_td_background
+    font-weight: bold
+    text-align: center
+
+tbody tr:hover
+  td
+    background-color: #4099E6
+    color: #FFFFFF
+  // #FF9A00

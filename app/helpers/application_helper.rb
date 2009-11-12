@@ -28,4 +28,14 @@ module ApplicationHelper
   def link_jqueryui_stylesheet(theme = 'base')
     stylesheet_link_tag "http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/themes/#{theme}/jquery-ui.css", :media => 'screen'
   end
+
+  def icon name, title
+    image_tag "icons/#{name}.png", :title => title, :class => 'icon'
+  end
+
+  def link_to_icon name, title, url_options = {}, options = {}
+    link_class = "icon-link-#{options.delete(:action_name) || name}"
+    options[:class] = "#{link_class} #{options[:class]}"
+    link_to icon(name, title), url_options, options
+  end
 end

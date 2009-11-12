@@ -5,6 +5,7 @@ en:
   cancel: cancel
   copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.
   description: description
+  email: email
   feedback: Feedback
   help: help
   here: here
@@ -12,6 +13,7 @@ en:
   name: name
   nurun: nurun
   operations: operations
+  password: password
   picture: picture
   save: save
   shortcuts: shortcuts

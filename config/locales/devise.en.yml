@@ -15,4 +15,7 @@ en:
     mailer:
       confirmation_instructions: 'Confirmation instructions'
       reset_password_instructions: 'Reset password instructions'
-
+  sessions:
+    new:
+      login: Log In
+      remember_me: 'Remember me?'

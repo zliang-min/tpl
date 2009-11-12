@@ -1,0 +1,66 @@
+*
+  margin: 0
+  padding: 0
+
+body
+  font-family: Georgia, serif
+  background: #{image_url("sessions/login-page-bg.jpg")} top center no-repeat #c4c4c4
+  color: #3a3a3a
+
+.clear
+  clear: both
+
+form
+  width: 406px
+  margin: 170px auto 0
+
+legend
+  display: none
+
+fieldset
+  border: 0
+
+label
+  width: 115px
+  text-align: right
+  float: left
+  margin: 0 10px 0 0
+  padding: 9px 0 0 0
+  font-size: 16px
+  &[for="user_remember_me"]
+    padding: 0
+
+input
+  color: #3a3a3a
+  display: block
+  font-family: Georgia, serif
+  font-size: 18px
+  margin: 0 0 10px 0
+  padding: 4px
+  width: 220px
+  &[type="checkbox"]
+    width: 20px
+    margin: 0
+    display: inline-block
+  &[type="hidden"]
+    margin: 0
+    padding: 0
+  &[name="user[remember_me]"]
+    margin: 0
+    position: relative
+    top: 3px
+					  
+.button
+  -moz-border-radius: 5px
+  -webkit-border-radius: 5px
+  background: #{image_url("sessions/button-bg.png")} repeat-x top center
+  border: 1px solid #999
+  color: black
+  font-weight: bold
+  font-size: 13px
+  margin: -20px 0 0 287px
+  padding: 5px
+  width: 70px
+  &:hover
+    background: white
+    color: black

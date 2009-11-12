@@ -5,7 +5,8 @@ var onLoadCallback = (function() {
       buttons: {
         Create: submitForm,
         Cancel: function() { $(this).dialog('close') }
-      }
+      },
+      open: function() { $(this).find('form').get(0).reset() }
     }).each(function() {
       var d = $(this);
       d.dialog('option', 'title', d.attr('data-dialog-title')).
@@ -92,17 +93,9 @@ var onLoadCallback = (function() {
     tr.appendTo($('#position-table').find('tbody'));
   }
 
-  function makeClickableTable() {
-    $('tbody tr').live('hover',
-        function() { $(this).addClass('hover') },
-        function() { $(this).removeClass('hover') }
-    );
-  }
-
   return function() {
     enableDialogs();
     handleFormSubmit();
     activeLinks();
-    makeClickableTable();
   }
 })();

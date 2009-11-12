@@ -3,12 +3,7 @@ class PositionsController < ApplicationController
   # GET /positions
   def index
     @categories = Category.all :order => :name
-    @positions  = Position.all :include => :category
-  end
-
-  # GET /positions/1
-  def show
-    @position = Position.find(params[:id])
+    @positions  = Position.all :include => [:category, :profiles]
   end
 
   # POST /positions
