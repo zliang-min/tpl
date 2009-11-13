@@ -3,16 +3,17 @@ var onLoadCallback = (function() {
     $('.dialog').dialog({
       autoOpen: false,
       buttons: {
-        Create: submitForm,
-        Cancel: function() { $(this).dialog('close') }
+        Cancel: function() { $(this).dialog('close') },
+        OK: submitForm
       },
       open: function() { $(this).find('form').get(0).reset() }
     }).each(function() {
       var d = $(this);
       d.dialog('option', 'title', d.attr('data-dialog-title')).
-      dialog('option', 'height', d.attr('data-dialog-height')).
-      dialog('option', 'width', d.attr('data-dialog-width')).
-      dialog('option', 'modal', d.hasClass('modal'));
+      dialog('option', 'height', parseInt(d.attr('data-dialog-height'))).
+      dialog('option', 'width', parseInt(d.attr('data-dialog-width'))).
+      dialog('option', 'modal', d.hasClass('modal')).
+      dialog('option', 'resizable', !d.hasClass('not-resizable'));
     });
   }
 
@@ -50,52 +51,131 @@ var onLoadCallback = (function() {
     return msg.join("\n");
   }
 
-  function handleFormSubmit() {
-    _handleFormSubmit($('#category-form').find('form'), {
+  function prepareForms() {
+    var cform = $('#category-form').find('form');
+    _handleFormSubmit(cform, {
       onSuccess: function(data) {
         data = data.category;
         $('<option/>').attr('value', data.id).attr('selected', 'selected').
           text(data.name).appendTo(
-            $('#position-form').find('select[name=position[category]]')
+            $('#position-form').find('select[name=position[category_id]]')
           );
-        $('#category-form').dialog('close');
+        cform.find('.cancel').click();
       }
     });
-    _handleFormSubmit($('#position-form').find('form'), {
+
+    var pform = $('#position-form').find('form');
+    _handleFormSubmit(pform, {
       onSuccess: function(data) {
-        $('p.notice').remove();
+        $('#positions > p').remove();
         addPosition(data.position);
-        $('#position-form').dialog('close');
+        pform.find('.cancel').click();
       }
+    });
+
+    $(':input.cancel').click(function(event) {
+      event.preventDefault();
+      this.form.reset();
+      $(this.form).parent().fadeOut('normal', function() {
+        $(this).prev().fadeIn('fast').find(':text:first').focus();
+      });
+      return false;
     });
   }
 
-  function activeLinks() {
-    $.each(['position', 'category'], function() {
-      var name = this;
-      $('a.button-link-add-' + name).click(function(event) {
-        event.preventDefault();
-        $('#' + name + '-form').dialog('open');
-        return false;
-      });
-    });
+  var positionTemplate;
+  function prepareTemplate() {
+    // TODO image srcs; Is putting this template on the view and grabbing it here a better idea?
+    positionTemplate = $(
+      '<div class="position">' +
+        '<h3>' +
+          '<a href="#" class="icon-link-minimize "><img alt="Minimize" class="icon" src="/images/icons/minimize.png" title="toggle" /></a>' +
+          '<span class="info">' +
+            '<span class="name"></span>' +
+            '-' +
+            '<span class="category"></span>' +
+            '<span class="state"></span>' +
+          '</span>' +
+          '<ul class="horizontal">' +
+            '<li><a class="icon-link-show "><img alt="Folder_files" class="icon" src="/images/icons/folder_files.png" title="detail infomation" /></a></li>' +
+            '<li><a class="icon-link-add "><img alt="Action_add" class="icon" src="/images/icons/action_add.png" title="add a new profile" /></a></li>' +
+          '</ul>' +
+          '<div class="clear-float"></div>' +
+        '</h3>' +
+        '<div class="profiles">' +
+          '<p class="notice">There are no profiles for this position yet.</p>' +
+        '</div>' +
+      '</div>'
+    );
   }
 
   function addPosition(object) {
-    var tr = $('<tr/>');
-    $('<td/>').text(object.category.name).appendTo(tr);
-    $('<td/>').text(object.name).appendTo(tr);
-    $('<td/>').text(object.description).appendTo(tr);
-    $('<td/>').text(object.state).appendTo(tr);
-    $('<a/>').attr('href', object.profiles_link).text('profiles').appendTo(
-      $('<td/>').appendTo(tr)
-    );
-    tr.appendTo($('#position-table').find('tbody'));
+    var position = positionTemplate.clone();
+    position.find('.name').text(object.name).end().
+      find('.category').text(object.category).end().
+      find('.state').text(object.state).end().
+      find('.icon-link-show').attr('href', object.profiles_link).end().
+      find('.icon-link-add').attr('href', object.new_profile_link).end().
+      prependTo($('#positions'));
+  }
+
+  function activeLinks() {
+    $('#tool-link-add-position').click(function(event) {
+      event.preventDefault();
+      $(this).parent('li').fadeOut('fast', function() {
+        $('#position-form').fadeIn('fast').find(':text:first').focus();
+      });
+      return false;
+    });
+    $('#tool-link-add-position-alt').click(function(event) {
+      event.preventDefault();
+      $('#tool-link-add-position').click();
+      return false;
+    });
+
+    $('.icon-link-add-category').click(function(event) {
+      event.preventDefault();
+      $('#position-form').fadeOut('fast', function() {
+        $('#category-form').fadeIn('fast').find(':text:first').focus();
+      });
+      return false;
+    });
+
+    $('.event').click(function(event) {
+      event.preventDefault();
+      $('#feedback-form').find('form').attr('action', this.href).end().dialog('open');
+      return false;
+    });
+  }
+
+  function createProfileEventLinks(td, events) {
+    td = $(td);
+    if( td.is(':has(ul)') ) {
+      ul = td.children('ul');
+      ul.children().remove();
+    } else {
+      ul = $('<ul/>').appendTo(td);
+    }
+
+    $.each(events, function() {
+      $('<a/>').addClass('event').attr('href', this.url).
+        text(this.name).appendTo(
+          $('<li/>').appendTo(ul)
+        );
+    });
+  }
+
+  function changeProfileEvent(data) {
+    data = data.profile;
+    var tds = $('#profile-' + data.id).children('td');
+    tds.eq(1).text(data.state).end();
+    createProfileEventLinks(tds.eq(2), data.events);
   }
 
   return function() {
     enableDialogs();
-    handleFormSubmit();
+    prepareForms();
     activeLinks();
+    prepareTemplate();
   }
 })();

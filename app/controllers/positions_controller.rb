@@ -3,28 +3,29 @@ class PositionsController < ApplicationController
   # GET /positions
   def index
     @categories = Category.all :order => :name
-    @positions  = Position.all :include => [:category, :profiles]
+    @positions  = Position.all :include => [:category, :profiles], :order => 'id DESC'
   end
 
   # POST /positions
   # POST /positions.json
   def create
-    category = Category.find_by_id params[:position].delete(:category)
     position = Position.new params[:position]
-    position.category = category
+    position.category = Category.find(position.category_id)
 
     respond_to do |format|
       if position.save
         format.json  {
           render(
             json: {
-              position: position.attributes.merge(
-                category: position.category.attributes,
+              position: {
+                id: position.id,
+                name: position.name,
+                category: position.category.name,
                 state: position.state,
-                profiles_link: position_profiles_path(position)
-              )
+                profiles_link: position_profiles_path(position),
+                new_profile_link: new_position_profile_path(position)
+              }
             },
-            #json: position.to_json(include: :category, methods: :state),
             status: :created
           )
         }

@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :feedbacks
-  map.resources :profiles, :except => :show
+  map.resources :profiles, :only => [:show, :create]
   map.handle_profile '/profiles/:id/:event', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }
   map.handle_profile_with_format '/profiles/:id/:event.:format', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }
 
@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
     r.resources :profiles
   end
 
-  map.resources :categories, :only => [:create]
+  map.resources :categories, :only => [:new, :create]
 
   map.devise_for :users
 

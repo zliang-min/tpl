@@ -38,6 +38,4 @@
   %p.notice= t('.none')
 
 - #---------------------------------------- dialogs
-#feedback-form.dialog{'data-dialog-title' => t(:feedback), 'data-dialog-width' => 500, 'data-dialog-height' => 500}
-  - form_for Feedback.new do |f|
-    = f.text_area :content
+= render :partial => 'shared/feedback_dialog'

@@ -1,9 +1,18 @@
 form
   label
     text-transform: capitalize
+  input
+    &[type="submit"], &[type="button"]
+      text-transform: capitalize
 
 textarea.feedback
   height: 100px
 
 input.short
   width: 220px
+
+#feedback-form
+  textarea
+    border: none
+    height: 143px
+    width: 100%

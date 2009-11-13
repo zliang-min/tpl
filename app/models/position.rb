@@ -3,6 +3,7 @@ class Position < ActiveRecord::Base
   validates_presence_of :name, :category
   validates_length_of :name, :maximum => 255
   validates_length_of :description, :maximum => 1000
+  validates_numericality_of :need, :only_integer => true, :allow_nil => true, :greater_than_or_equal_to => 0
 
   belongs_to :category
   has_many :profiles, :dependent => :destroy

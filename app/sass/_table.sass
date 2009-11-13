@@ -1,14 +1,21 @@
 // # Configurations
-!table_width = 100%
-!td_border_color = #FFFFFF
-!thead_th_background = #91c5d4
-!span_th_background = #66a9bd
-!tbody_th_background = #91c5d4
-!tbody_td_background = #d5eaf0
-!tfoot_th_background = #b0cc7f
-!tfoot_td_background = #d7e1c5
+!table_width ||= 100%
+// ## borders
+!table_border_color ||= #FFFFFF
+!table_border_style ||= "solid"
+!table_border_width ||= 1px
+!table_border ||= !table_border_width !table_border_style !table_border_color
+// ## backgrounds
+// ### th
+!thead_th_background ||= #91c5d4
+!span_th_background ||= #66a9bd
+!tbody_th_background ||= #91c5d4
+!tfoot_th_background ||= #b0cc7f
+// ### td
+!tbody_td_background ||= #d5eaf0
+!tfoot_td_background ||= #d7e1c5
 
-// # style
+// # Style
 // ## first reset every thing
 table, caption, td, tr, th
   margin: 0
@@ -25,7 +32,7 @@ caption
   text-align: left
 
 th, td
-  border = 1px "solid" !td_border_color
+  border = !table_border
   border-width: 0 1px 1px 0
   padding: 5px
 
@@ -55,4 +62,7 @@ tbody tr:hover
   td
     background-color: #4099E6
     color: #FFFFFF
-  // #FF9A00
+
+// ### exceptions
+form tbody td
+  text-align: left

@@ -1,0 +1,3 @@
+#feedback-form.dialog.not-resizable{'data-dialog-title' => t(:feedback), 'data-dialog-width' => 600, 'data-dialog-height' => 250}
+  - form_for Feedback.new do |f|
+    = f.text_area :content

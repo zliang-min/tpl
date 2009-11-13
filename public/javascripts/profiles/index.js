@@ -3,8 +3,8 @@ var onLoadCallback = (function() {
     $('.dialog').dialog({
       autoOpen: false,
       buttons: {
-        Create: submitForm,
-        Cancel: function() { $(this).dialog('close') }
+        Cancel: function() { $(this).dialog('close') },
+        OK: submitForm
       },
       open: function() { $(this).find('form').get(0).reset() }
     }).each(function() {
@@ -102,19 +102,19 @@ var onLoadCallback = (function() {
     });
   }
 
+  function changeProfileEvent(data) {
+    data = data.profile;
+    var tds = $('#profile-' + data.id).children('td');
+    tds.eq(1).text(data.state).end();
+    createProfileEventLinks(tds.eq(2), data.events);
+  }
+
   function setupTable() {
     $('#profile-table .event').live('click', function(event) {
       event.preventDefault();
       $('#feedback-form').find('form').attr('action', this.href).end().dialog('open');
       return false;
     });
-  }
-
-  function changeProfileEvent(data) {
-    data = data.profile;
-    var tds = $('#profile-' + data.id).children('td');
-    tds.eq(1).text(data.state).end();
-    createProfileEventLinks(tds.eq(2), data.events);
   }
 
   return function() {
