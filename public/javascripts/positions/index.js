@@ -168,7 +168,7 @@ var onLoadCallback = (function() {
   function changeProfileEvent(data) {
     data = data.profile;
     var tds = $('#profile-' + data.id).children('td');
-    tds.eq(1).text(data.state).end();
+    tds.eq(1).text(data.state);
     createProfileEventLinks(tds.eq(2), data.events);
   }
 

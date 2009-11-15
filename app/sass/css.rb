@@ -1,5 +1,9 @@
 def my_table(cssClass = nil)
+  table '#hello'
+  c(:abc).and( id(:opq) {
+  }
   table[cssClass] {
+    self.abc#fie
     + compact
     width 30.px
     height 40.px
