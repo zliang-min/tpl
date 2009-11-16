@@ -1,7 +1,12 @@
 class Profile < ActiveRecord::Base
 
+  attr_protected :state
+
   validates_presence_of :name, :position_id
   validates_length_of :name, :maximum => 255
+  validates_length_of :education, :maximum => 255, :allow_nil => true
+  validates_numericality_of :work_experience, :only_integer => true, :allow_nil => true, :greater_than_or_equal_to => 0
+  validate :birthday_should_be_a_valid_date
 
   belongs_to :position
   has_many :logs, :class_name => 'ProfileLog', :order => 'id', :dependent => :destroy
@@ -94,6 +99,13 @@ class Profile < ActiveRecord::Base
   private
   def memorize_changes
     @changes_before_update = changes
+  end
+
+  def birthday_should_be_a_valid_date
+    value = birthday_before_type_cast || birthday
+    unless value.blank?
+      Date.parse(value) rescue errors.add(:birthday, :invalid_date)
+    end
   end
 
 end

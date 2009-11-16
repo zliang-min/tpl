@@ -1,0 +1,6 @@
+---
+en:
+  activerecord:
+    errors:
+      messages:
+        invalid_date: is not a valid date.

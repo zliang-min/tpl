@@ -24,6 +24,8 @@ var onLoadCallback = (function() {
       realForm.submit();
       return false;
     });
+
+    fakeForm.find(':text:first').focus();
   }
 
   return function() {

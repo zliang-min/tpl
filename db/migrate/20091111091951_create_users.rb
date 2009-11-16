@@ -10,8 +10,8 @@ class CreateUsers < ActiveRecord::Migration
     end
 
     add_index :users, :email
-    add_index :confirmation_token
-    add_index :reset_password_token
+    #add_index :users, :confirmation_token
+    #add_index :users, :reset_password_token
   end
 
   def self.down

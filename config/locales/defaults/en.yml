@@ -3,9 +3,11 @@ en:
 # Follow alphabet order
   added_at: added at
   admin: admin
+  birthday: birthday
   cancel: cancel
   copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.
   description: description
+  education: education
   email: email
   feedback: Feedback
   help: help
@@ -21,6 +23,8 @@ en:
   state: state
   title: RMS - Recruitment Management System
   tools: tools
+  work_experience: work experience
+  years: years
 
   CV: CV
   RMS: Recruitment Management System

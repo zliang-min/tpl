@@ -24,6 +24,9 @@
           %ul.compact
             %li= f.file_field :cv, :class => 'short'
       = f.hidden_field :name, :class => 'copy-cat'
+      = f.hidden_field :birthday, :class => 'copy-cat'
+      = f.hidden_field :education, :class => 'copy-cat'
+      = f.hidden_field :work_experience, :class => 'copy-cat'
       = f.hidden_field :position_id, :value => @position.id
       - f.fields_for :feedbacks, Feedback.new do |fb|
         = fb.hidden_field :content, :class => 'copy-cat'
@@ -38,13 +41,26 @@
       %table
         %tbody
           %tr
-            %td
+            %th
               = f.label :name, t(:name)
             %td
               = f.text_field :name
+            %th
+              = f.label :name, t(:birthday)
+            %td
+              = f.text_field :birthday
+          %tr
+            %th
+              = f.label :education, t(:education)
+            %td
+              = f.text_field :education
+            %th
+              = f.label :work_experience, t('.work_experience')
+            %td
+              = f.text_field :work_experience
           - f.fields_for :feedbacks, Feedback.new do |feedback_fields|
             %tr
-              %td
+              %th
                 = feedback_fields.label :content, t(:feedback)
-              %td
+              %td(colspan="3")
                 = feedback_fields.text_area :content, :class => 'feedback'

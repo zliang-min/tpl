@@ -1,8 +1,8 @@
-- #---------------------------------------- head
+-#---------------------------------------- head
 - content_for :head do
   = stylesheet_link_tag "profiles/show"
 
-- #---------------------------------------- sidebar
+-#---------------------------------------- sidebar
 :ruby
   shortcuts = []
   shortcuts << ['back', position_profiles_path(@profile.position)]
@@ -31,20 +31,35 @@
     [t(:CV), cv]
   ]
 
-- #---------------------------------------- content
-.profile
-  %h2= t '.profile'
-  #details
-    %ul
-      %li Name: #{@profile.name}
-      %li State: #{@profile.state}
-  .feedbacks
-    %h3= t '.log'
-    %dl
-      - @profile.logs.each do |log|
-        %dt= log.action
-        %dd
-          - if log.feedback.blank?
-            = t '.no_feedbacks'
-          - else
-            &= log.feedback.content
+-#---------------------------------------- content
+#details
+  %table
+    %caption= t '.detials'
+    %tbody
+      %tr
+        %th
+          %label= t :name
+        %td&= @profile.name
+        %th
+          %label= t :birthday
+        %td= @profile.birthday ? l(@profile.birthday) : nil
+      %tr
+        %th
+          %label= t :education
+        %td&= @profile.education
+        %th
+          %label= t :work_experience
+        %td= @profile.work_experience ? "%d %s" % [@profile.work_experience, t(:years)] : nil
+#logs
+  %h3= t '.log'
+  %dl
+    - @profile.logs.each do |log|
+      %dt
+        .action= log.action
+        .date= l log.created_at
+        .clear-float
+      %dd
+        - if log.feedback.blank?
+          = t '.no_feedbacks'
+        - else
+          &= log.feedback.content
