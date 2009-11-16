@@ -10,3 +10,4 @@ script/gems
 vendor/bundled_gems/*
 !vendor/bundled_gems/cache
 public/system
+.svn
