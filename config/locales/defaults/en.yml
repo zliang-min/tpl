@@ -1,6 +1,7 @@
 ---
 en:
 # Follow alphabet order
+  added_at: added at
   admin: admin
   cancel: cancel
   copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.

@@ -73,6 +73,13 @@ var onLoadCallback = (function() {
       }
     });
 
+    _handleFormSubmit($('#feedback-form').find('form'), {
+      onSuccess: function(data) {
+        changeProfileEvent(data);
+        $('#feedback-form').dialog('close');
+      }
+    });
+
     $(':input.cancel').click(function(event) {
       event.preventDefault();
       this.form.reset();
@@ -113,7 +120,7 @@ var onLoadCallback = (function() {
     var position = positionTemplate.clone();
     position.find('.name').text(object.name).end().
       find('.category').text(object.category).end().
-      find('.state').text(object.state).end().
+      find('.state').text(' ( ' + object.state + ' ) ').end().
       find('.icon-link-show').attr('href', object.profiles_link).end().
       find('.icon-link-add').attr('href', object.new_profile_link).end().
       prependTo($('#positions'));
@@ -141,7 +148,7 @@ var onLoadCallback = (function() {
       return false;
     });
 
-    $('.event').click(function(event) {
+    $('.event').live('click', function(event) {
       event.preventDefault();
       $('#feedback-form').find('form').attr('action', this.href).end().dialog('open');
       return false;
@@ -154,22 +161,30 @@ var onLoadCallback = (function() {
       ul = td.children('ul');
       ul.children().remove();
     } else {
-      ul = $('<ul/>').appendTo(td);
+      ul = $('<ul/>').addClass('horizontal').appendTo(td);
     }
 
-    $.each(events, function() {
-      $('<a/>').addClass('event').attr('href', this.url).
-        text(this.name).appendTo(
-          $('<li/>').appendTo(ul)
-        );
-    });
+    if( events.length > 0 ) {
+      createAProfileEventLink(events.shift(), ul);
+      $.each(events, function() {
+        $('<li/>').addClass('separator').text('|').appendTo(ul);
+        createAProfileEventLink(this, ul);
+      });
+    }
+  }
+
+  function createAProfileEventLink(event, ul) {
+    $('<a/>').addClass('event').attr('href', event.url).
+      text(event.name).appendTo(
+        $('<li/>').appendTo(ul)
+      );
   }
 
   function changeProfileEvent(data) {
     data = data.profile;
     var tds = $('#profile-' + data.id).children('td');
     tds.eq(1).text(data.state);
-    createProfileEventLinks(tds.eq(2), data.events);
+    createProfileEventLinks(tds.eq(3), data.events);
   }
 
   return function() {

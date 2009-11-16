@@ -66,7 +66,7 @@
           %span.name&= position.name
           \-
           %span.category&= position.category.name
-          %span.state= " (#{position.state})"
+          %span.state= " ( #{position.state} )"
         %ul.horizontal
           %li= link_to_icon 'folder_files', t('.details'), position_profiles_path(position), :action_name => 'show'
           %li= link_to_icon 'action_add', t('.add_profile'), new_position_profile_path(position), :action_name => 'add'
@@ -80,8 +80,8 @@
               %tr
                 %th= t :name
                 %th= t :state
-                %th= t :created_at
-                %th= t :operation
+                %th= t :added_at
+                %th= t :operations
             %tbody
               - position.profiles.each_with_index do |profile, index|
                 - break if index > 4
