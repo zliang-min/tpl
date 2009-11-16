@@ -8,20 +8,20 @@
 - content_for :sidebar do
   #sidebar
     - form_for @profile, :html => {:multipart => true, :id => 'real-form'} do |f|
-      %ul
+      %ul.compact
         %li
           %h2= t :tools
-          %ul
+          %ul.compact
             %li= link_to t(:save), profiles_path, :id => 'tool-save'
             %li= link_to t(:cancel), position_profiles_path(@position)
         %li
           %h2= t :picture
-          %ul
+          %ul.compact
             %li.picture= image_tag 'blue_ghost.jpg'
             %li= f.file_field :picture, :class => 'short'
         %li
           %h2= t :CV
-          %ul
+          %ul.compact
             %li= f.file_field :cv, :class => 'short'
       = f.hidden_field :name, :class => 'copy-cat'
       = f.hidden_field :position_id, :value => @position.id

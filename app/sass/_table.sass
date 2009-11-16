@@ -3,17 +3,17 @@
 // ## borders
 !table_border_color ||= #FFFFFF
 !table_border_style ||= "solid"
-!table_border_width ||= 1px
+!table_border_width ||= 'none'
 !table_border ||= !table_border_width !table_border_style !table_border_color
 // ## backgrounds
 // ### th
-!thead_th_background ||= #91c5d4
-!span_th_background ||= #66a9bd
-!tbody_th_background ||= #91c5d4
-!tfoot_th_background ||= #b0cc7f
+!thead_th_background ||= #FFFFFF
+!span_th_background ||=  #FFFFFF
+!tbody_th_background ||= #FFFFFF
+!tfoot_th_background ||= #FFFFFF
 // ### td
-!tbody_td_background ||= #d5eaf0
-!tfoot_td_background ||= #d7e1c5
+!tbody_td_background ||= #FFFFFF
+!tfoot_td_background ||= #FFFFFF
 
 // # Style
 // ## first reset every thing
@@ -58,10 +58,8 @@ td
     font-weight: bold
     text-align: center
 
-tbody tr:hover
-  td
-    background-color: #4099E6
-    color: #FFFFFF
+tbody tr:hover td
+  background: #fbb6b7
 
 // ### exceptions
 form tbody td

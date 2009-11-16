@@ -24,16 +24,15 @@
     %tr
       %th.name= t :name
       %th.state= t :state
+      %th.date= t :added_at
       %th.operations= t :operations
   %tbody
     - @profiles.each do |profile|
       %tr{:id => "profile-#{profile.id}"}
         %td= link_to h(profile.name), profile_path(profile)
         %td&= profile.state
-        %td
-          %ul
-            - profile.state_events.each do |event|
-              %li= link_to event, handle_profile_path(:id => profile.id, :event => event), :class => 'event'
+        %td= l profile.created_at, :format => :short
+        %td= profile_events_links profile
 - if @profiles.empty?
   %p.notice= t('.none')
 

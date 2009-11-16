@@ -10,9 +10,10 @@ var onLoadCallback = (function() {
     }).each(function() {
       var d = $(this);
       d.dialog('option', 'title', d.attr('data-dialog-title')).
-      dialog('option', 'width', d.attr('data-dialog-width')).
-      dialog('option', 'height', d.attr('data-dialog-height')).
-      dialog('option', 'modal', d.hasClass('modal'));
+      dialog('option', 'height', parseInt(d.attr('data-dialog-height'))).
+      dialog('option', 'width', parseInt(d.attr('data-dialog-width'))).
+      dialog('option', 'modal', d.hasClass('modal')).
+      dialog('option', 'resizable', !d.hasClass('not-resizable'));
     });
 
     $('.dialog-switch').click(function(event) {
@@ -91,22 +92,30 @@ var onLoadCallback = (function() {
       ul = td.children('ul');
       ul.children().remove();
     } else {
-      ul = $('<ul/>').appendTo(td);
+      ul = $('<ul/>').addClass('horizontal').appendTo(td);
     }
 
-    $.each(events, function() {
-      $('<a/>').addClass('event').attr('href', this.url).
-        text(this.name).appendTo(
-          $('<li/>').appendTo(ul)
-        );
-    });
+    if( events.length > 0 ) {
+      createAProfileEventLink(events.shift(), ul);
+      $.each(events, function() {
+        $('<li/>').addClass('separator').text('|').appendTo(ul);
+        createAProfileEventLink(this, ul);
+      });
+    }
+  }
+
+  function createAProfileEventLink(event, ul) {
+    $('<a/>').addClass('event').attr('href', event.url).
+      text(event.name).appendTo(
+        $('<li/>').appendTo(ul)
+      );
   }
 
   function changeProfileEvent(data) {
     data = data.profile;
     var tds = $('#profile-' + data.id).children('td');
-    tds.eq(1).text(data.state).end();
-    createProfileEventLinks(tds.eq(2), data.events);
+    tds.eq(1).text(data.state);
+    createProfileEventLinks(tds.eq(3), data.events);
   }
 
   function setupTable() {
