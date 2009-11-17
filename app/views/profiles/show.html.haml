@@ -1,6 +1,9 @@
 -#---------------------------------------- head
 - content_for :head do
   = stylesheet_link_tag "profiles/show"
+  = link_jqueryui_stylesheet 'humanity'
+  = javascript_include_tag 'profiles/show'
+  = include_google_jsapi jquery: '1.3', jqueryui: '1.7'
 
 -#---------------------------------------- sidebar
 :ruby
@@ -32,6 +35,8 @@
   ]
 
 -#---------------------------------------- content
+- if flash[:failure]
+  .error&= t falsh[:failure]
 #details
   %table
     %caption= t '.detials'
@@ -50,6 +55,16 @@
         %th
           %label= t :work_experience
         %td= @profile.work_experience ? "%d %s" % [@profile.work_experience, t(:years)] : nil
+      %tr
+        %th
+          %label= t :state
+        %td#state(colspan="3")
+          #name= @profile.state
+          - unless @profile.state_events.blank?
+            %ul.horizontal
+              - @profile.state_events.each do |event|
+                %li
+                  %input{:type => 'button', :value => event, 'data-href' => handle_profile_path(:id => @profile, :event => event), :class => 'event'}
 #logs
   %h3= t '.log'
   %dl
@@ -66,3 +81,6 @@
           = t '.no_feedbacks'
         - else
           &= log.feedback.content
+
+-#------------------------------------------dialog
+= render :partial => 'shared/feedback_dialog'

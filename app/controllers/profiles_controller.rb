@@ -56,6 +56,7 @@ class ProfilesController < ApplicationController
 
     respond_to do |format|
       if profile.trigger current_user, params[:event], feedback
+        format.html { redirect_to :action => :show }
         format.json {
           render json: {
             profile: {
@@ -68,6 +69,10 @@ class ProfilesController < ApplicationController
           }, status: :ok
         }
       else
+        format.html {
+          flash[:failure] = '.update_state_failed'
+          redirect_to :action => :show
+        }
         format.json { render :nothing => true, :status => :unprocessable_entity }
       end
     end
