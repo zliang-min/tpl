@@ -19,7 +19,7 @@
               %input#search-submit(type="submit" value="Search")
       #menu
         %ul.horizontal
-          %li= link_to t(:home), root_path
+          %li.first= link_to t(:home), root_path
           %li= link_to t('menu.positions'), positions_path
           %li= link_to t('menu.profiles'), '#'
           %li= link_to t('admin'), '#'

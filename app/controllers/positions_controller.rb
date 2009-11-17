@@ -11,6 +11,7 @@ class PositionsController < ApplicationController
   def create
     position = Position.new params[:position]
     position.category = Category.find(position.category_id)
+    position.creator = current_user
 
     respond_to do |format|
       if position.save

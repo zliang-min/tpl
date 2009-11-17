@@ -14,7 +14,7 @@ class ProfilesController < ApplicationController
   # POST /profiles
   # POST /profiles.json
   def create
-    profile = Profile.add params[:profile]
+    profile = Profile.add current_user, params[:profile]
 
     respond_to do |format|
       if profile.save
@@ -44,7 +44,7 @@ class ProfilesController < ApplicationController
 
   # GET /profiles/:id
   def show
-    @profile = Profile.find params[:id], :include => [:position, {:logs => :feedback}]
+    @profile = Profile.find params[:id], :include => [:position, {:logs => [:operator, :feedback]}]
   end
 
   # POST /profiles/:id/:event
@@ -55,7 +55,7 @@ class ProfilesController < ApplicationController
     feedback = params[:feedback][:content].strip
 
     respond_to do |format|
-      if profile.trigger params[:event], feedback
+      if profile.trigger current_user, params[:event], feedback
         format.json {
           render json: {
             profile: {

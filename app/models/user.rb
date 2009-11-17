@@ -8,6 +8,11 @@ class User < ActiveRecord::Base
   validates_format_of :email, :allow_blank => true,
     :with => Devise::Models::Validatable::EMAIL_REGEX
 
+  has_many :positions,    :dependent => :nullify
+  has_many :profile_logs, :dependent => :nullify
+  has_many :operations,   :dependent => :nullify
+
+  # @param [Net::LDAP::Entry] a ldap entry which consists of a user's info. The entry should at least have a *mail* attribute.
   def self.create_or_update_from_ldap ldap_entry
     attrs = {}
     ldap_entry.each { |attr, values|

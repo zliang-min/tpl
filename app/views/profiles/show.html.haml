@@ -56,6 +56,9 @@
     - @profile.logs.each do |log|
       %dt
         .action= log.action
+        .operator
+          by:
+          &= log.operator ? log.operator.displayname : '-'
         .date= l log.created_at
         .clear-float
       %dd
