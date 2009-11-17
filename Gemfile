@@ -22,6 +22,7 @@ gem 'mime-types', '>= 1.16', :require_as => 'mime/types'
 gem 'bluecloth', '>= 2.0.5'
 
 gem 'devise', '>= 0.4.3', :only => :load_in_environment_rb
+gem 'net-ldap', '>= 0.0.5', :require_as => 'net/ldap'
 
 only :test do
   gem 'sqlite3-ruby', '>= 1.2.5', require_as: 'sqlite3'

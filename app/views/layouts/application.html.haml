@@ -1,8 +1,4 @@
 !!!
-/
-  Originally design by Free CSS Templates
-  http://www.freecsstemplates.org
-  Released for free under a Creative Commons Attribution 2.5 License
 %html
   %head
     %meta(name="keywords" content="recruitment manange nurun")
@@ -23,14 +19,11 @@
               %input#search-submit(type="submit" value="Search")
       #menu
         %ul.horizontal
-          %li.current_page_item
-            = link_to t(:home), root_path
-          %li
-            = link_to t('menu.positions'), positions_path
-          %li
-            = link_to t('menu.profiles'), '#'
-          %li
-            = link_to t('admin'), '#'
+          %li= link_to t(:home), root_path
+          %li= link_to t('menu.positions'), positions_path
+          %li= link_to t('menu.profiles'), '#'
+          %li= link_to t('admin'), '#'
+          %li= link_to t('logoff'), destroy_user_session_path
       #page
         #page-bgtop
           #page-bgbtm

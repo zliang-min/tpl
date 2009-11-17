@@ -24,3 +24,16 @@
 - if devise_mapping.confirmable?
   = link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name)
   %br
+
+- if flash[:failure]
+  .error= flash[:failure]
+
+:javascript
+  window.onload = function() {
+    var fields = document.getElementsByTagName('input');
+    for( var i = 0; i < fields.length; i++ )
+      if( fields[i].getAttribute('type') == 'text' ) {
+        fields[i].focus();
+        break;
+      }
+  }
