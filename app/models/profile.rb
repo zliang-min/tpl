@@ -51,6 +51,10 @@ class Profile < ActiveRecord::Base
     event :accepted do
       transition :offered => :accepted
     end
+
+    after_transition :on => :accepted do |profile, _|
+      Position.increment_counter :filled, profile.position_id
+    end
   end
 
   def self.add by_who, options = {}
