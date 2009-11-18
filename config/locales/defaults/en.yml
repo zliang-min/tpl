@@ -6,6 +6,7 @@ en:
   birthday: birthday
   cancel: cancel
   categories: departments
+  configuration: configuration
   copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.
   description: description
   education: education

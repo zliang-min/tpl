@@ -1,4 +1,9 @@
 ActionController::Routing::Routes.draw do |map|
+  map.namespace :admin do |admin|
+    admin.root :controller => 'home'
+    # /admin/configuration/:name
+    admin.resources :configurations, :only => [:show, :update]
+  end
   map.resources :feedbacks
   map.resources :profiles, :only => [:show, :create]
   map.handle_profile '/profiles/:id/:event', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }

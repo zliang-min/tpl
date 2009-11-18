@@ -1,0 +1,11 @@
+- form_tag admin_configuration_path(:id => Configuration::LDAP.group_name) do
+  %table
+    %caption&= Configuration::LDAP.group_name
+    %tbody
+      - Configuration::LDAP.instance.preferences.each do |k, v|
+        %tr
+          %th
+            %label&= k
+          %td= text_field_tag k, v
+  #buttons
+    = submit_tag t(:save)

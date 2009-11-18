@@ -1,0 +1,21 @@
+-#-- head -----------------------------------------------
+- content_for :head do
+  = stylesheet_link_tag "admin"
+
+-#-- sidebar --------------------------------------------
+:ruby
+  sidebar(
+    t('configuration') => @configurations.map do |conf|
+      [conf.name, admin_configuration_path(:id => conf.name)]
+    end
+  )
+
+-#-- content --------------------------------------------
+:ruby
+  conf = if flash[:selected_configuration]
+           Configuration.group flash[:selected_configuration]
+         else
+           @configurations.first
+         end
+
+= render :partial => configuration_partial(conf)
