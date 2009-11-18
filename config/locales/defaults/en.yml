@@ -5,6 +5,7 @@ en:
   admin: admin
   birthday: birthday
   cancel: cancel
+  categories: departments
   copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.
   description: description
   education: education

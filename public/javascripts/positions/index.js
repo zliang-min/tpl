@@ -67,7 +67,7 @@ var onLoadCallback = (function() {
     var pform = $('#position-form').find('form');
     _handleFormSubmit(pform, {
       onSuccess: function(data) {
-        $('#positions > p').remove();
+        $('#content > p').remove();
         addPosition(data.position);
         pform.find('.cancel').click();
       }

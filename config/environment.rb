@@ -24,6 +24,9 @@ Rails::Initializer.run do |config|
   # config.gem "aws-s3", :lib => "aws/s3"
 
   # config.gem 'thoughtbot-paperclip', :lib => 'paperclip' # observers loaded before this!
+
+  # These are rails engines, specified here to make them work properly.
+  config.gem 'preferences'
   config.gem 'devise'
 
   # Only load the plugins named here, in the order given (default is alphabetical).
@@ -46,4 +49,6 @@ Rails::Initializer.run do |config|
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
    config.i18n.load_path = Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
   # config.i18n.default_locale = :de
+
+  config.cache_store = :memory_store
 end

@@ -3,28 +3,36 @@ require 'warden'
 Warden::Strategies.add(:ldap) do
 
   def valid?
-    p = params[scope] || params
-    p[:mail] or p[:email] or p[:username]
+    !!email
   end
 
   def authenticate!
     halt! # don't try any other strategies.
 
-    p = params[scope] || params
-    ldap = Net::LDAP.new :host => 'shaad00.nurun.com', :base => 'dc=nurun,dc=com'
-    mail = p[:mail] || p[:email] || p[:username]
-    mail << '@nurun.com' unless mail['@']
-    ldap.auth mail, p[:password]
+    ldap = Net::LDAP.new \
+      :host => Configuration::LDAP[:host],
+      :base => Configuration::LDAP[:treebase]
+    mail = email
+    mail << "@#{Configuration::LDAP[:email_domain]}" unless mail['@']
+    ldap.auth mail, parameters[:password]
     if ldap.bind
       user = User.create_or_update_from_ldap \
         ldap.search(
-          :attributes => [:description, :physicaldeliveryofficename, :displayname, :mail],
+          :attributes => [Configuration::LDAP[:position_attribute].to_sym, :physicaldeliveryofficename, :displayname, :mail],
           :filter => Net::LDAP::Filter.eq('mail', mail)
         ).first
       success! user
     else
       fail! :unauthenticated
     end
+  end
+
+  def parameters
+    @parameters ||= ( params[scope] || params )
+  end
+
+  def email
+    parameters[:email] or parameters[:mail] or parameters[:username]
   end
 
 end

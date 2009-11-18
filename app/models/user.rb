@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   devise :rememberable
 
-  attr_accessible :description, :physicaldeliveryofficename, :displayname 
+  attr_accessible :position, :physicaldeliveryofficename, :displayname 
 
   validates_presence_of :email
   validates_format_of :email, :allow_blank => true,
@@ -25,6 +25,7 @@ class User < ActiveRecord::Base
       user.email = attrs[:mail]
     end
     user.attributes = attrs
+    user.position = attrs[Configuration::LDAP[:position_attribute].to_sym]
     user.save!
 
     user

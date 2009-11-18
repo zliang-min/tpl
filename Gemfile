@@ -11,9 +11,10 @@ gem 'rack', '>= 1.0.1'
 gem 'rails', '2.3.4'
 
 gem 'mysql', except: :test
-gem 'activerecord', '2.3.4' # require here or paperclip cannot find ActiveRecord!!
+gem 'activerecord', '2.3.4' # require here or paperclip, preferences cannot find ActiveRecord!!
 gem 'thoughtbot-paperclip', '>= 2.3.1', :require_as => 'paperclip'
 gem 'state_machine', '>= 0.8.0'
+gem 'preferences', '>= 0.3.1'
 #gem 'matthuhiggins-foreigner', '>= 0.2.1', require_as: 'foreigner', only: :install
 
 gem 'haml', '>= 2.2.10'
@@ -21,7 +22,7 @@ gem 'compass', '>= 0.8.17'
 gem 'mime-types', '>= 1.16', :require_as => 'mime/types'
 gem 'bluecloth', '>= 2.0.5'
 
-gem 'devise', '>= 0.4.3', :only => :load_in_environment_rb
+gem 'devise', '>= 0.4.3', only: :can_loaded_in_environment_rb
 gem 'net-ldap', '>= 0.0.5', :require_as => 'net/ldap'
 
 only :test do
