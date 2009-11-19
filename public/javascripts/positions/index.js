@@ -48,6 +48,7 @@ var onLoadCallback = (function() {
     $.each(error, function() {
       msg.push(this.join(' '))
     });
+    if( msg.length < 1 ) msg.push('Opps! Error occured. You may try it later.')
     return msg.join("\n");
   }
 
@@ -83,6 +84,12 @@ var onLoadCallback = (function() {
     $(':input.cancel').click(function(event) {
       event.preventDefault();
       this.form.reset();
+      $(this.form).find('select').map(function() {
+        // In IE, after reset, $('select').val() is null!
+        $(this).val(
+          $(this.options[this.selectedIndex]).val()
+        );
+      });
       $(this.form).parent().fadeOut('normal', function() {
         $(this).prev().fadeIn('fast').find(':text:first').focus();
       });

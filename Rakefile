@@ -1,7 +1,7 @@
 # Add your own tasks in files placed in lib/tasks ending in .rake,
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
-if ARGV.first == 'gems:bundle'
+if ['gems:bundle', 'gems:build'].include?(ARGV.first)
   namespace :gems do
     desc 'Run gem bundle command.'
     task :bundle do
@@ -11,6 +11,9 @@ if ARGV.first == 'gems:bundle'
         exit 1
       end
     end
+
+    desc 'Override gems:build.'
+    task :build => :bundle
   end
 else
   require(File.join(File.dirname(__FILE__), 'config', 'boot'))

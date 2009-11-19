@@ -3,8 +3,7 @@
 // ## borders
 !table_border_color ||= #FFFFFF
 !table_border_style ||= "solid"
-!table_border_width ||= 'none'
-!table_border ||= !table_border_width !table_border_style !table_border_color
+!table_border_width ||= "none"
 // ## backgrounds
 // ### th
 !thead_th_background ||= #FFFFFF
@@ -32,8 +31,7 @@ caption
   text-align: left
 
 th, td
-  border = !table_border
-  border-width: 0 1px 1px 0
+  border = !table_border_width !table_border_style !table_border_color
   padding: 5px
 
 th

@@ -48,7 +48,9 @@ module ApplicationHelper
         'error'
       end
 
-    msg = t(msg) unless options.values_at(:t, :translate).include?(false)
-    content_tag 'div', msg, :class => cssClass if msg
+    if msg
+      msg = t(msg) unless options.values_at(:t, :translate).include?(false)
+      content_tag 'div', msg, :class => cssClass
+    end
   end
 end

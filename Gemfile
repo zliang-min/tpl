@@ -17,7 +17,7 @@ gem 'state_machine', '>= 0.8.0'
 gem 'preferences', '>= 0.3.1'
 #gem 'matthuhiggins-foreigner', '>= 0.2.1', require_as: 'foreigner', only: :install
 
-gem 'action_controller', '2.3.4' # haml needs ActionView
+gem 'actionpack', '2.3.4', :require_as => ['action_pack', 'action_controller'] # haml needs ActionView
 gem 'haml', '>= 2.2.10'
 gem 'compass', '>= 0.8.17'
 gem 'mime-types', '>= 1.16', :require_as => 'mime/types'
