@@ -12,10 +12,6 @@
 
 -#-- content --------------------------------------------
 :ruby
-  conf = if flash[:selected_configuration]
-           Configuration.group flash[:selected_configuration]
-         else
-           @configurations.first
-         end
+  conf = flash[:selected_configuration] || @configurations.first
 
-= render :partial => configuration_partial(conf)
+= render :partial => 'admin/configurations/edit', :locals => {:configuration => conf}

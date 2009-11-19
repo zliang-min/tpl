@@ -1,0 +1,7 @@
+---
+en:
+  admin:
+    configurations:
+      edit:
+        success: Changes saved successfully.
+        failure: Changes saving failed. You may try it latter.

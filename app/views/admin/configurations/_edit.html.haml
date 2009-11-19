@@ -1,0 +1,13 @@
+- conf_name = configuration.name
+= success_or_failure_message
+- form_tag admin_configuration_path(:id => conf_name) do
+  %table
+    %caption&= conf_name
+    %tbody
+      - configuration.preferences.each do |k, v|
+        %tr
+          %th
+            %label&= k
+          %td= text_field_tag "#{conf_name}[#{k}]", v, :id => "#{conf_name}_#{k}"
+  #buttons
+    = submit_tag t(:save)

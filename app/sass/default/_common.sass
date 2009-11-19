@@ -34,12 +34,21 @@ a
 .clear-float
   clear: both
 
+=msg_block(!bg, !c, !border, !link)
+  background = !bg
+  border = 2px "solid" !border
+  color = !c
+  margin-bottom: 1em
+  padding: .8em
+  a
+    color = !link
+
 .error
-  padding:.8em
-  margin-bottom:1em
-  border:2px solid #FBC2C4
-  background:#FBE3E4
-  color:#8a1f11
+  +msg_block(#FBE3E4, #8a1f11, #FBC2C4, #8a1f11)
+.notice
+  +msg_block(#FFF6BF, #514721, #FFD324, #514721)
+.success
+  +msg_block(#E6EFC2, #264409, #C6D880, #264409)
 
 .dialog
   display: none

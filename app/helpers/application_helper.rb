@@ -38,4 +38,12 @@ module ApplicationHelper
     options[:class] = "#{link_class} #{options[:class]}"
     link_to icon(name, title), url_options, options
   end
+
+  def success_or_failure_message
+    if flash[:success]
+      content_tag 'p', t(flash[:success]), :class => 'success'
+    elsif flash[:failure]
+      content_tag 'p', t(flash[:failure]), :class => 'error'
+    end
+  end
 end

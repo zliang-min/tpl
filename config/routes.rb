@@ -2,7 +2,10 @@ ActionController::Routing::Routes.draw do |map|
   map.namespace :admin do |admin|
     admin.root :controller => 'home'
     # /admin/configuration/:name
-    admin.resources :configurations, :only => [:show, :update]
+    admin.resources :configurations, :only => [:show] #, :update] #<= it doesn't work
+    admin.connect '/configurations/:id',
+      :controller => 'configurations', :action => 'update',
+      :conditions => { :method => :post }
   end
   map.resources :feedbacks
   map.resources :profiles, :only => [:show, :create]

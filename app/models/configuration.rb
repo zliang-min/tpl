@@ -52,10 +52,11 @@ class Configuration < ActiveRecord::Base
     end
 
     def group name
-      groups.detect { |g| g.group_name == name }.instance
+      g = groups.detect { |g| g.group_name == name }
+      g ? g.instance : nil
     end
 
-    def get(key = nil)          
+    def get(key = nil)
       key = key.to_s if key.is_a?(Symbol)
       return nil unless config = self.instance
       config.get key
@@ -80,8 +81,12 @@ class Configuration < ActiveRecord::Base
     preferences.each do |key, value|
       set_preference(key, value)
     end
-    save
-    Rails.cache.delete(self.class.to_s) { self.preferences }
+    if save
+      Rails.cache.delete(self.class.to_s) { self.preferences }
+      true
+    else
+      false
+    end
   end
 
 end
