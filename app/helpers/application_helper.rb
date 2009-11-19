@@ -39,11 +39,16 @@ module ApplicationHelper
     link_to icon(name, title), url_options, options
   end
 
-  def success_or_failure_message
-    if flash[:success]
-      content_tag 'p', t(flash[:success]), :class => 'success'
-    elsif flash[:failure]
-      content_tag 'p', t(flash[:failure]), :class => 'error'
-    end
+  # @param [Boolean] only_now specifies if only show messages stored in flash.now or not. Defaults true.
+  def success_or_failure_message options = {}
+    cssClass =
+      if msg = flash[:success]
+        'success'
+      elsif msg = flash[:failure]
+        'error'
+      end
+
+    msg = t(msg) unless options.values_at(:t, :translate).include?(false)
+    content_tag 'div', msg, :class => cssClass if msg
   end
 end

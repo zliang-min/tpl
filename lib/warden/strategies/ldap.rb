@@ -23,7 +23,7 @@ Warden::Strategies.add(:ldap) do
         ).first
       success! user
     else
-      fail! :unauthenticated
+      fail! :invalid
     end
   end
 

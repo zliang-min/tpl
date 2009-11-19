@@ -17,6 +17,7 @@ gem 'state_machine', '>= 0.8.0'
 gem 'preferences', '>= 0.3.1'
 #gem 'matthuhiggins-foreigner', '>= 0.2.1', require_as: 'foreigner', only: :install
 
+gem 'action_controller', '2.3.4' # haml needs ActionView
 gem 'haml', '>= 2.2.10'
 gem 'compass', '>= 0.8.17'
 gem 'mime-types', '>= 1.16', :require_as => 'mime/types'
@@ -24,6 +25,8 @@ gem 'bluecloth', '>= 2.0.5'
 
 gem 'devise', '>= 0.4.3', only: :can_loaded_in_environment_rb
 gem 'net-ldap', '>= 0.0.5', :require_as => 'net/ldap'
+
+gem 'thin', '>= 1.2.5', only: :install
 
 only :test do
   gem 'sqlite3-ruby', '>= 1.2.5', require_as: 'sqlite3'

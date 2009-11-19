@@ -6,7 +6,7 @@
     [t(:categories), @categories.map { |c| c.name }]
   ] # sidebar
 
-%h2 Recent Activities
+%h2= t '.recent'
 %ul
   - @operations.each do |op|
     %li= parse_event op.event

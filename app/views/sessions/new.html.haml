@@ -15,7 +15,7 @@
       .clear
     %br
 
-    = f.submit "Sign in", :class => "button"
+    = f.submit t('.login'), :class => "button"
 
 - if devise_mapping.recoverable?
   = link_to "Forgot password?", new_password_path(resource_name)
@@ -25,8 +25,7 @@
   = link_to "Didn't receive confirmation instructions?", new_confirmation_path(resource_name)
   %br
 
-- if flash[:failure]
-  .error= flash[:failure]
+= success_or_failure_message t: false
 
 :javascript
   window.onload = function() {

@@ -5,11 +5,16 @@ form
     &[type="submit"], &[type="button"]
       text-transform: capitalize
 
-textarea.feedback
-  height: 100px
-
 input.short
   width: 220px
+
+input
+  &[type="submit"], &[type="button"], &[type="reset"]
+    &:hover
+      cursor: pointer
+
+textarea.feedback
+  height: 100px
 
 #feedback-form
   textarea
