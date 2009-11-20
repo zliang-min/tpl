@@ -5,6 +5,7 @@ log/*
 tmp
 public/stylesheets
 config/database.yml
+config/thin.yml
 db/schema.rb
 script/gems
 vendor/bundled_gems/*

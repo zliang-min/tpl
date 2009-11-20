@@ -30,7 +30,7 @@ development:
 test:
   adapter: sqlite3
   encoding: utf8
-  database: :memory:
+  database: db/test.sqlite
 
 production:
   adapter: mysql
