@@ -3,7 +3,7 @@ class PositionObserver < ActiveRecord::Observer
   def after_create position
     Operation.create \
       :operator => position.creator,
-      :event => "_#{position.creator.displayname}_ has added " \
+      :event => "_#{position.creator.displayname}_ added " \
                 "a new position #{name_for position} " \
                 "at #{I18n.l position.created_at, :format => :short}."
   end
@@ -11,8 +11,8 @@ class PositionObserver < ActiveRecord::Observer
   def after_update position
     Operation.create \
       :operator => position.creator,
-      :event => "_#{position.creator.displayname}_ has updated " \
-                "a new position #{name_for position} " \
+      :event => "_#{position.creator.displayname}_ updated " \
+                "position #{name_for position} " \
                 "at #{I18n.l position.updated_at, :format => :short}."
   end
 

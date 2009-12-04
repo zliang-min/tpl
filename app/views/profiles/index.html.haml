@@ -32,9 +32,9 @@
         %td= link_to h(profile.name), profile_path(profile)
         %td&= profile.state
         %td= l profile.created_at, :format => :short
-        %td= profile_events_links profile
+        %td= link_to t(:change_state), shift_profile_path(:id => profile.id), :class => 'event'
 - if @profiles.empty?
   %p.notice= t('.none')
 
 - #---------------------------------------- dialogs
-= render :partial => 'shared/feedback_dialog'
+= render :partial => 'shared/state_dialog'

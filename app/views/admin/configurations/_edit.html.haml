@@ -2,7 +2,7 @@
 = success_or_failure_message
 - form_tag admin_configuration_path(:id => conf_name) do
   %table
-    %caption&= conf_name
+    %caption&= t conf_name, :scope => 'admin.configurations'
     %tbody
       - configuration.preferences.each do |k, v|
         %tr

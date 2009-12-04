@@ -96,4 +96,5 @@ end
 # require Configuration subclasses here manually.
 #
 # ** Loading order matters
+Configuration::ProfileStatus
 Configuration::LDAP

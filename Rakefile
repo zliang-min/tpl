@@ -6,8 +6,9 @@ if ['gems:bundle', 'gems:build'].include?(ARGV.first) or
   namespace :gems do
     desc 'Run gem bundle command.'
     task :bundle do
-      config_file = File.join(File.dirname(__FILE__), 'Gemfile')
-      unless system("gem bundle --cached -m #{config_file}")
+      config_file  = File.join(File.dirname(__FILE__), 'Gemfile')
+      options_file = File.join(File.dirname(__FILE__), 'config/build_options.yml')
+      unless system("gem bundle --cached -m #{config_file} -b #{options_file} --only production --only load_in_environment_rb")
         puts "Gem bundle failed!"
         exit 1
       end
@@ -38,14 +39,17 @@ if ['gems:bundle', 'gems:build'].include?(ARGV.first) or
       %w[gems:build config/database.yml].each { |task|
         Rake::Task[task].invoke
       }
+    end
 
+    desc 'Get everything ready to run the app.'
+    task :prepare_to_run => :prepare do
       %w[db:create db:migrate].each { |task|
         sh "rake #{task}"
       }
     end
 
     desc 'Run (start or restart) the app.'
-    task :run => :prepare do
+    task :run => :prepare_to_run do
       Rake::Task['config/thin.yml'].invoke
       sh 'script/gems/thin restart -C config/thin.yml'
     end
@@ -80,7 +84,29 @@ else
     desc 'Get everything ready to run the app.'
     task :prepare
 
+    desc 'Get everything ready to run the app.'
+    task :prepare_to_run
+
     desc 'Run (start or restart) the app.'
-    task :run => :prepare
+    task :run => :prepare_to_run
+  end
+
+  def enable_record_sql
+    class << ActiveRecord::Base.connection
+      def execute_with_record_sql sql, *args, &blk
+        File.open('db/migration.sql', 'a') { |f| f << "#{sql};\n" }
+        execute_without_record_sql sql, *args, &blk
+      end
+
+      alias_method_chain :execute, :record_sql
+    end
+  end
+
+  namespace :db do
+    desc "Run db:migrate and record the sql script in db/migration.sql."
+    task :migrate_and_record => :environment do
+      enable_record_sql
+      Rake::Task['db:migrate'].invoke
+    end
   end
 end

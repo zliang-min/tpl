@@ -74,10 +74,10 @@ var onLoadCallback = (function() {
       }
     });
 
-    _handleFormSubmit($('#feedback-form').find('form'), {
+    _handleFormSubmit($('#state-form').find('form'), {
       onSuccess: function(data) {
-        changeProfileEvent(data);
-        $('#feedback-form').dialog('close');
+        changeProfileState(data);
+        $('#state-form').dialog('close');
       }
     });
 
@@ -86,9 +86,10 @@ var onLoadCallback = (function() {
       this.form.reset();
       $(this.form).find('select').map(function() {
         // In IE, after reset, $('select').val() is null!
-        $(this).val(
-          $(this.options[this.selectedIndex]).val()
-        );
+        if(!this.selectedIndex < 0)
+          $(this).val(
+            $(this.options[this.selectedIndex]).val()
+          );
       });
       $(this.form).parent().fadeOut('normal', function() {
         $(this).prev().fadeIn('fast').find(':text:first').focus();
@@ -157,41 +158,15 @@ var onLoadCallback = (function() {
 
     $('.event').live('click', function(event) {
       event.preventDefault();
-      $('#feedback-form').find('form').attr('action', this.href).end().dialog('open');
+      $('#state-form').find('form').attr('action', this.href).end().dialog('open');
       return false;
     });
   }
 
-  function createProfileEventLinks(td, events) {
-    td = $(td);
-    if( td.is(':has(ul)') ) {
-      ul = td.children('ul');
-      ul.children().remove();
-    } else {
-      ul = $('<ul/>').addClass('horizontal').appendTo(td);
-    }
-
-    if( events.length > 0 ) {
-      createAProfileEventLink(events.shift(), ul);
-      $.each(events, function() {
-        $('<li/>').addClass('separator').text('|').appendTo(ul);
-        createAProfileEventLink(this, ul);
-      });
-    }
-  }
-
-  function createAProfileEventLink(event, ul) {
-    $('<a/>').addClass('event').attr('href', event.url).
-      text(event.name).appendTo(
-        $('<li/>').appendTo(ul)
-      );
-  }
-
-  function changeProfileEvent(data) {
+  function changeProfileState(data) {
     data = data.profile;
     var tds = $('#profile-' + data.id).children('td');
     tds.eq(1).text(data.state);
-    createProfileEventLinks(tds.eq(3), data.events);
   }
 
   return function() {

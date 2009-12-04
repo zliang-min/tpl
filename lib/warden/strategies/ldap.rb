@@ -16,11 +16,17 @@ Warden::Strategies.add(:ldap) do
     mail << "@#{Configuration::LDAP[:email_domain]}" unless mail['@']
     ldap.auth mail, parameters[:password]
     if ldap.bind
-      user = User.create_or_update_from_ldap \
-        ldap.search(
-          :attributes => [Configuration::LDAP[:position_attribute].to_sym, :physicaldeliveryofficename, :displayname, :mail],
-          :filter => Net::LDAP::Filter.eq('mail', mail)
-        ).first
+      user_info = ldap.search(
+        :attributes => [Configuration::LDAP[:position_attribute].to_sym, :physicaldeliveryofficename, :displayname, :mail, :memberof],
+        :filter => Net::LDAP::Filter.eq('mail', mail)
+      ).first
+
+      fail! :invalid unless user_info.memberof.any? do |group|
+        group.split(',').any? { |prop| prop = 'CN=\\#GRP_NDPC_RMS_USER' }
+      end
+
+      user = User.create_or_update_from_ldap user_info
+        
       success! user
     else
       fail! :invalid

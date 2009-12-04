@@ -6,7 +6,10 @@
 :ruby
   sidebar(
     t('configuration') => @configurations.map do |conf|
-      [conf.name, admin_configuration_path(:id => conf.name)]
+      [
+        t(conf.name, :scope => 'admin.configurations'),
+        admin_configuration_path(:id => conf.name)
+      ]
     end
   )
 
@@ -14,4 +17,4 @@
 :ruby
   conf = flash[:selected_configuration] || @configurations.first
 
-= render :partial => 'admin/configurations/edit', :locals => {:configuration => conf}
+= render_configuration_partial conf

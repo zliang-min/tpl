@@ -1,0 +1,15 @@
+#state-form.dialog.not-resizable{'data-dialog-title' => t(:change_state), 'data-dialog-width' => 400, 'data-dialog-height' => 360}
+  - form_tag do
+    %table
+      %tr
+        %th
+          %label(for='profile[state]')= t('profile.state')
+        %td= profile_state_select_tag
+      %tr
+        %th
+          %label(for="profile[assign_to]")= t('profile.assign_to')
+        %td= text_field_tag 'profile[assign_to]'
+      %tr
+        %th
+          %label(for="feedback[content]")= t(:feedback)
+        %td= text_area_tag 'feedback[content]', nil, :style => 'width: 250px;height: 150px'

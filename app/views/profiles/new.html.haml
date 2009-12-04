@@ -1,43 +1,24 @@
-- #---------------------------------------- head
+-#---------------------------------------- head
 - content_for :head do
   = stylesheet_link_tag "profiles/new"
   = javascript_include_tag 'profiles/new'
   = include_google_jsapi jquery: '1.3'
 
-- #---------------------------------------- sidebar
-- content_for :sidebar do
-  #sidebar
-    - form_for @profile, :html => {:multipart => true, :id => 'real-form'} do |f|
-      %ul.compact
-        %li
-          %h2= t :tools
-          %ul.compact
-            %li= link_to t(:save), profiles_path, :id => 'tool-save'
-            %li= link_to t(:cancel), position_profiles_path(@position)
-        %li
-          %h2= t :picture
-          %ul.compact
-            %li.picture= image_tag 'blue_ghost.jpg'
-            %li= f.file_field :picture, :class => 'short'
-        %li
-          %h2= t :CV
-          %ul.compact
-            %li= f.file_field :cv, :class => 'short'
-      = f.hidden_field :name, :class => 'copy-cat'
-      = f.hidden_field :birthday, :class => 'copy-cat'
-      = f.hidden_field :education, :class => 'copy-cat'
-      = f.hidden_field :work_experience, :class => 'copy-cat'
-      = f.hidden_field :position_id, :value => @position.id
-      - f.fields_for :feedbacks, Feedback.new do |fb|
-        = fb.hidden_field :content, :class => 'copy-cat'
+-#---------------------------------------- sidebar
+:ruby
+  sidebar t(:tools) => [
+    link_to(t(:save), profiles_path, :id => 'tool-save'),
+    link_to(t(:cancel), position_profiles_path(@position))
+  ]
 
-- #---------------------------------------- content
+-#---------------------------------------- content
 #profile
   %h2 Position: #{@position.name}
-  - form_for @profile, :html => {:id => 'fake-form'} do |f|
+  - form_for @profile do |f|
     %fieldset
       %legend= t '.details'
       = f.error_messages
+      = f.hidden_field :position_id, :value => @position.id
       %table
         %tbody
           %tr
@@ -58,9 +39,23 @@
               = f.label :work_experience, t('.work_experience')
             %td
               = f.text_field :work_experience
-          - f.fields_for :feedbacks, Feedback.new do |feedback_fields|
+          %tr
+            %th
+              = f.label :assign_to, t('profile.assign_to')
+            %td(colspan="3")
+              = f.text_field :assign_to
+    %fieldset
+      %legend= t 'profile.cv'
+      %table
+        %tbody
+          %tr
+            %td
+              = f.text_area :cv, :class => 'cv'
+    - f.fields_for :feedbacks, Feedback.new do |feedback_fields|
+      %fieldset
+        %legend= t :feedback
+        %table
+          %tbody
             %tr
-              %th
-                = feedback_fields.label :content, t(:feedback)
-              %td(colspan="3")
+              %td(colspan="4")
                 = feedback_fields.text_area :content, :class => 'feedback'

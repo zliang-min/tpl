@@ -28,9 +28,10 @@ class ProfilesController < ApplicationController
                 name: profile.name,
                 show_link: profile_path(profile),
                 state: profile.state,
-                events: profile.state_events.map do |e|
-                  { name: e, url: handle_profile_path(:id => profile.id, :event => e) }
-                end
+                change_state: {
+                  text: t(:change_state),
+                  href: shift_profile_path(profile)
+                }
               }
             }, status: :created
           )
@@ -47,26 +48,21 @@ class ProfilesController < ApplicationController
     @profile = Profile.find params[:id], :include => [:position, {:logs => [:operator, :feedback]}]
   end
 
-  # POST /profiles/:id/:event
-  # POST /profiles/:id/:event.json
-  def handle
+  # POST /profiles/:id/shift
+  # POST /profiles/:id/shift.json
+  def shift
     profile = Profile.find(params[:id])
 
-    feedback = params[:feedback][:content].strip
-
     respond_to do |format|
-      if profile.trigger current_user, params[:event], feedback
+      if profile.change_state(
+        :to => params[:profile][:state],
+        :assign_to => params[:profile][:assign_to],
+        :by => current_user,
+        :feedback => params[:feedback][:content].strip
+      )
         format.html { redirect_to :action => :show }
         format.json {
-          render json: {
-            profile: {
-              id: profile.id,
-              state: profile.state,
-              events: profile.state_events.map do |e|
-                { name: e, url: handle_profile_path(:id => profile.id, :event => e) }
-              end
-            }
-          }, status: :ok
+          render :json => profile.to_json(:only => [:id, :state]), status: :ok
         }
       else
         format.html {
@@ -79,13 +75,14 @@ class ProfilesController < ApplicationController
   end
 
   private
-  def find_position
-    @position = if params[:position_id]
-                  Position.find params[:position_id]
-                elsif params[:profile] and (id = params[:profile][:position_id])
-                  # So that raises an exception if position doesn't exist.
-                  Position.find id
-                end
-  end
+    def find_position
+      @position =
+        if params[:position_id]
+          Position.find params[:position_id]
+        elsif params[:profile] and (id = params[:profile][:position_id])
+          # So that raises an exception if position doesn't exist.
+          Position.find id
+        end
+    end
 
 end

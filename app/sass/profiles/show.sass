@@ -1,4 +1,5 @@
 @import profiles/new
+@import facebox
 
 table
   border-spacing: 5px 5px
@@ -29,8 +30,12 @@ td
     background: #335ab8
     color: #FFFFFF
     cursor: pointer
-    width: 80px
-
+    width: 120px
+#cv
+  margin-bottom: 10px
+  #cv-content
+    max-height: 400px
+    overflow: auto
 dl
   padding: 5px
 dt
@@ -48,3 +53,7 @@ dt
     float: right
 dd
   margin-bottom: 10px
+
+#state-form
+  textarea#feedback_content
+    border: 1px solid #60849a

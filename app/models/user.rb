@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
-  devise :rememberable
+  devise :authenticatable, :rememberable
 
   attr_accessible :position, :physicaldeliveryofficename, :displayname 
 

@@ -1,0 +1,3 @@
+# example
+# mysql:
+#   mysql-config: /usr/local/lib/mysql

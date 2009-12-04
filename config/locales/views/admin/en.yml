@@ -2,6 +2,12 @@
 en:
   admin:
     configurations:
+      ProfileStatus: Profile States
+      profile_status:
+        states: states
+        add_more: Add More
+        success: Changes saved successfully.
+        failure: Changes saving failed. You may try it latter.
       edit:
         success: Changes saved successfully.
         failure: Changes saving failed. You may try it latter.

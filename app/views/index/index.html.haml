@@ -1,10 +1,11 @@
 - content_for :head do
   = stylesheet_link_tag 'default', :media => 'screen'
 
-:ruby
-  sidebar [
-    [t(:categories), @categories.map { |c| c.name }]
-  ] # sidebar
+-#
+  ruby
+    sidebar [
+      [t(:categories), @categories.map { |c| c.name }]
+    ] # sidebar
 
 %h2= t '.recent'
 %ul

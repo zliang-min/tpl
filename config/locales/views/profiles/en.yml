@@ -1,5 +1,6 @@
 ---
 en:
+  change_state: change state
   profiles:
     index:
       add: Add a new profile
@@ -7,6 +8,7 @@ en:
       title: Create a profile
     show:
       detials: Profile details
+      fullscreen: (read in fullsreen)
       log: Operation Log
       no_cv: This profile has no CVs.
       no_feedbacks: '< No feedbacks left here >'

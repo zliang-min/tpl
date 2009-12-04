@@ -22,17 +22,7 @@
     shortcuts << 'next profile'
   end
 
-  cv = if @profile.cv.exists?
-         link_to @profile.cv.original_filename, @profile.cv.url
-       else
-         t('.no_cv')
-       end
-
-  sidebar [
-    [t(:shortcuts), shortcuts],
-    [t(:picture), [sidebar_picture_for(@profile)]],
-    [t(:CV), cv]
-  ]
+  sidebar t(:shortcuts) => shortcuts
 
 -#---------------------------------------- content
 - if flash[:failure]
@@ -60,17 +50,21 @@
           %label= t :state
         %td#state(colspan="3")
           #name= @profile.state
-          - unless @profile.state_events.blank?
-            %ul.horizontal
-              - @profile.state_events.each do |event|
-                %li
-                  %input{:type => 'button', :value => event, 'data-href' => handle_profile_path(:id => @profile, :event => event), :class => 'event'}
+          %input{:type => 'button', :value => t(:change_state), 'data-href' => shift_profile_path(@profile), :class => 'event'}
+#cv
+  %h3
+    = t 'profile.cv'
+    = link_to t('.fullscreen'), '#cv-content', :id => 'fullscreen', :rel => 'facebox', 'data-loadingimg' => image_path('facebox/loading.gif'), 'data-closeimg' => image_path('facebox/closelabel.gif')
+  %hr
+  #cv-content
+    %pre= @profile.cv
 #logs
   %h3= t '.log'
+  %hr
   %dl
     - @profile.logs.each do |log|
       %dt
-        .action= log.action
+        .action= t(log.action, :scope => 'profile.log.action')
         .operator
           by:
           &= log.operator ? log.operator.displayname : '-'
@@ -83,4 +77,4 @@
           &= log.feedback.content
 
 -#------------------------------------------dialog
-= render :partial => 'shared/feedback_dialog'
+= render :partial => 'shared/state_dialog'

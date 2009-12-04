@@ -1,6 +1,9 @@
 class ProfileLog < ActiveRecord::Base
 
-  NEW_ACTION = 'add'.freeze
+  ACTIONS = {
+    :new => 'add'.freeze,
+    :change_state => 'change_state'.freeze
+  }.freeze
 
   validates_presence_of :action
   validates_presence_of :operator, :on => :create

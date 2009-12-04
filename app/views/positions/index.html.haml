@@ -89,9 +89,10 @@
                   %td= link_to h(profile.name), profile_path(profile)
                   %td= profile.state
                   %td= l profile.created_at, :format => :short
-                  %td= profile_events_links profile
+                  %td= link_to t(:change_state), shift_profile_path(:id => profile.id), :class => 'event'
+ 
 - if @positions.empty?
   %p.notice= t('.no_positions', :new_link => link_to(t(:here), new_position_path, id: 'tool-link-add-position-alt'))
 
 -#-------------------------------- dialogs
-= render :partial => 'shared/feedback_dialog'
+= render :partial => 'shared/state_dialog'

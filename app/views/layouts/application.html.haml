@@ -27,9 +27,14 @@
       #page
         #page-bgtop
           #page-bgbtm
-            #content
-              = yield
-            = yield :sidebar
+            - sidebar_content = yield :sidebar
+            - if sidebar_content.blank?
+              #content.fullscreen
+                = yield
+            - else
+              #content
+                = yield
+            = sidebar_content
             .clear-float &nbsp;
     #footer
       %p= t :copyright, year: '2009', author: link_to(t(:nurun), "http://www.nurun.com")

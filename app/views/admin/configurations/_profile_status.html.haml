@@ -1,0 +1,22 @@
+-# --- head ---------------------------------
+- content_for :head do
+  = javascript_include_tag 'admin/configuration/profile_status'
+  = include_google_jsapi jquery: '1.3'
+
+-# --- content ------------------------------
+- conf_name = configuration.name
+= success_or_failure_message
+- form_tag admin_configuration_path(:id => conf_name) do
+  %table
+    %caption= t conf_name, :scope => 'admin.configurations'
+    %tbody
+      %tr
+        %th
+          %label&= t('.states')
+        %td#statuses
+          - configuration.preferred_statuses.each_with_index do |status, ind|
+            %div
+              = text_field_tag "#{conf_name}[statuses][#{ind}]", h(status), :id => "#{conf_name}_statuses"
+  #buttons
+    = submit_tag t(:save)
+    %input#add_status{:type => "button", :value => t('.add_more')}

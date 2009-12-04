@@ -1,5 +1,13 @@
 ---
 en:
+  profile:
+    state: state
+    assign_to: assign to
+    cv: CV
+    log:
+      action:
+        add: add
+        change_state: change state
   activerecord:
     errors:
       messages:

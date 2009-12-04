@@ -12,6 +12,7 @@ class Profile < ActiveRecord::Base
   has_many :logs, :class_name => 'ProfileLog', :order => 'id', :dependent => :destroy
   has_many :feedbacks, :through => :logs
 
+=begin
   has_attached_file :picture
   validates_attachment_content_type :picture,
     :content_type => %r'image/(jpeg|png|gif|bmp)',
@@ -21,7 +22,11 @@ class Profile < ActiveRecord::Base
   validates_attachment_content_type :cv,
     :content_type => [%r'application/(msword|pdf)', %r'text/(plain|html)'],
     :message => I18n.t('activerecord.errors.messages.profile.cv.invalid_content_type')
+=end
 
+  before_create :set_initial_state
+
+=begin
   state_machine :initial => :new do
     # *WARNING* Don't use 'any' nor 'all' in the _from_ part of a transition. Because state_events cannot see that kinds of events.
     event :reject do
@@ -56,25 +61,29 @@ class Profile < ActiveRecord::Base
       Position.increment_counter :filled, profile.position_id
     end
   end
+=end
 
   def self.add by_who, options = {}
     feedback = options.delete(:feedbacks)
     feedback[:content].strip! if feedback
 
     profile = self.new(options)
-    log = profile.logs.build :action => ProfileLog::NEW_ACTION
+    log = profile.logs.build :action => ProfileLog::ACTIONS[:new]
     log.operator = by_who
     log.build_feedback :content => feedback[:content] unless feedback[:content].blank?
 
     profile
   end
 
-  def trigger by_who, event, feedback = nil
-    log = logs.build :action => event
-    log.operator = by_who
+  def change_state(options={})
+    self.assign_to = options[:assign_to] unless options[:assign_to].blank?
+    log = logs.build :action => ProfileLog::ACTIONS[:change_state]
+    log.operator = options[:by]
+    feedback = options[:feedback]
     feedback.strip! if feedback
     log.build_feedback :content => feedback unless feedback.blank?
-    fire_events event.to_sym
+    self.state = options[:to]
+    save
   end
 
   def previous_one
@@ -91,6 +100,10 @@ class Profile < ActiveRecord::Base
     unless value.blank?
       Date.parse(value) rescue errors.add(:birthday, :invalid_date)
     end
+  end
+
+  def set_initial_state
+    self.state = Configuration.group('ProfileStatus').preferred_statuses.first
   end
 
 end
