@@ -1,16 +1,25 @@
 class Profile < ActiveRecord::Base
+  
+  PHONE_REGEX = /^\+?[-\d ]+$/.freeze
 
   attr_protected :state
 
   validates_presence_of :name, :position_id
   validates_length_of :name, :maximum => 255
+  validates_length_of :chinese_name, :maximum => 255, :allow_nil => true
   validates_length_of :education, :maximum => 255, :allow_nil => true
-  validates_numericality_of :work_experience, :only_integer => true, :allow_nil => true, :greater_than_or_equal_to => 0
-  validate :birthday_should_be_a_valid_date
+  validates_numericality_of :work_experience, :only_integer => true,
+    :allow_nil => true, :greater_than_or_equal_to => 0
+  validates_format_of :email, :with => Devise::Models::Validatable::EMAIL_REGEX,
+    :allow_blank => true
+  validate :validates_birthday_format
+  validate :validates_mobile_phone_format
 
   belongs_to :position
   has_many :logs, :class_name => 'ProfileLog', :order => 'id', :dependent => :destroy
   has_many :feedbacks, :through => :logs
+
+  named_scope :not_closed, :conditions => ['state <> ?', Configuration.group('ProfileStatus').special_state_name_for(:closed)], :order => 'id DESC'
 
 =begin
   has_attached_file :picture
@@ -25,6 +34,7 @@ class Profile < ActiveRecord::Base
 =end
 
   before_create :set_initial_state
+  before_save   :set_assigned_at
 
 =begin
   state_machine :initial => :new do
@@ -63,6 +73,13 @@ class Profile < ActiveRecord::Base
   end
 =end
 
+  # Creates a new profile.
+  # @param [User] by_who who did this operation
+  # @param [Hash] options
+  # @option [Hash] :feedbacks feedback attributes for this operation
+  #   @option [String] :content feedback content
+  # Other options for +options+ will used as profile attributes.
+  # @return [Profile] newly created but not yet saved profile.
   def self.add by_who, options = {}
     feedback = options.delete(:feedbacks)
     feedback[:content].strip! if feedback
@@ -75,6 +92,13 @@ class Profile < ActiveRecord::Base
     profile
   end
 
+  # Changes the state of this profile and save.
+  # @param [Hash] options
+  # @option [String] :assign_to format: "{email},{user name}"
+  # @option [User] :by who did this operation
+  # @option [String] :feedback feedback for this operation
+  # @option [String] :to the destination state
+  # @return [Boolean] indicates if successfully save or not.
   def change_state(options={})
     self.assign_to = options[:assign_to] unless options[:assign_to].blank?
     log = logs.build :action => ProfileLog::ACTIONS[:change_state]
@@ -86,24 +110,65 @@ class Profile < ActiveRecord::Base
     save
   end
 
+  # Returns the previous profile which belongs to the same position with this.
+  # @return [Profile] profile previous to this one.
   def previous_one
-    self.class.first :conditions => ['id < ?', id], :order => 'id DESC'
+    self.class.first \
+      :conditions => ['position_id = ? and id < ?', position_id, id],
+      :order => 'id DESC'
   end
 
+  # Returns the next profile which belongs to the same position with this.
+  # @return [Profile] profile next to this one.
   def next_one
-    self.class.first :conditions => ['id > ?', id], :order => 'id'
+    self.class.first \
+      :conditions => ['position_id = ? and id > ?', position_id, id],
+      :order => 'id'
+  end
+
+  # Returns the user name part of assign_to attribute.
+  def assign_to
+    (to = read_attribute :assign_to) && to.split(',', 2).last
+  end
+
+  # Returns the email part of assign_to attribute.
+  def email_of_assigned_user
+    (to = read_attribute :assign_to) && to.split(',', 2).first
+  end
+
+  def display_name
+    if chinese_name.blank?
+      name
+    else
+      "#{name} (#{chinese_name})"
+    end
   end
 
   private
-  def birthday_should_be_a_valid_date
+  def validates_birthday_format
     value = birthday_before_type_cast || birthday
     unless value.blank?
       Date.parse(value) rescue errors.add(:birthday, :invalid_date)
     end
   end
 
+  def validates_mobile_phone_format
+    value = mobile_phone_before_type_cast || mobile_phone
+    unless value.blank?
+      unless value =~ PHONE_REGEX and value.gsub(/\D/, '').size > 9
+        errors.add(:mobile_phone, :invalid)
+      end
+    end
+  end
+
   def set_initial_state
     self.state = Configuration.group('ProfileStatus').preferred_statuses.first
+    true
+  end
+
+  def set_assigned_at
+    self.assigned_at = Time.zone.now if changed.include?('assign_to')
+    true
   end
 
 end

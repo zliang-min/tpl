@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h4>Hello, dear <%= @profile.assign_to %>:</h4>
+    <p>The state of profile "<%= @profile.name %>" was updated to <%= @profile.state %> and that profile was assigned to you. Click <a href="<%= profile_url @profile %>">here</a> to view it. Following is the feedback for this update:</p>
+    <p>
+      <pre>
+        <%= @log.feedback.content rescue "No feedback." %>
+      </pre>
+    </p>
+    <p><div>Best regards,</div><div>Nurun RMS</div></p>
+  </body>
+</html>

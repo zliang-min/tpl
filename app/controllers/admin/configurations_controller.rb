@@ -7,10 +7,10 @@ class Admin::ConfigurationsController < ApplicationController
   end
 
   def update
-    if @configuration.set(params[@configuration.name])
-      flash[:success] = '.success'
+    if @configuration.set(params[@configuration.name], current_user.email)
+      flash[:success] = 'admin.configurations.update.success'
     else
-      flash[:failure] = '.failure'
+      flash[:failure] = 'admin.configurations.update.failure'
     end
 
     redirect_to admin_root_path

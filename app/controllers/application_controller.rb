@@ -11,6 +11,16 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate_user!
   before_filter :set_locale
 
+  # a convenient helper to get page param.
+  # @return [Integer] page number
+  def page
+    (params[:page] || 1).to_i
+  end
+
+  def per_page
+    Configuration::Application.get('per_page', current_user.email)
+  end
+
   private
   def set_locale
     I18n.locale = params[:locale] unless params[:locale].blank?

@@ -33,31 +33,60 @@
     %tbody
       %tr
         %th
-          %label= t :name
-        %td&= @profile.name
+          %label= Profile.human_attribute_name :name
+        %td
+          &= @profile.name
         %th
-          %label= t :birthday
-        %td= @profile.birthday ? l(@profile.birthday) : nil
+          %label= Profile.human_attribute_name :chinese_name
+        %td
+          &= @profile.chinese_name
       %tr
         %th
-          %label= t :education
-        %td&= @profile.education
+          %label= Profile.human_attribute_name :mobile_phone
+        %td
+          = @profile.mobile_phone
         %th
-          %label= t :work_experience
-        %td= @profile.work_experience ? "%d %s" % [@profile.work_experience, t(:years)] : nil
+          %label= Profile.human_attribute_name :email
+        %td
+          = @profile.email
       %tr
         %th
-          %label= t :state
-        %td#state(colspan="3")
-          #name= @profile.state
+          %label= Profile.human_attribute_name :education
+        %td
+          &= @profile.education
+        %th
+          %label= Profile.human_attribute_name :work_experience
+        %td
+          = @profile.work_experience ? "%d %s" % [@profile.work_experience, t(:years)] : nil
+      %tr
+        %th
+          %label= Profile.human_attribute_name :birthday
+        %td
+          = @profile.birthday ? l(@profile.birthday) : nil
+        %th
+          %label= Profile.human_attribute_name :channel
+        %td
+          &= @profile.channel
+      %tr
+        %th
+          %label= Profile.human_attribute_name :assign_to
+        %td(colspan="3")
+          = assign_info(@profile)
+      %tr
+        %th
+          %label= Profile.human_attribute_name :state
+        %td#state(colspan="2")
+          = @profile.state
+        %td
           %input{:type => 'button', :value => t(:change_state), 'data-href' => shift_profile_path(@profile), :class => 'event'}
-#cv
-  %h3
-    = t 'profile.cv'
-    = link_to t('.fullscreen'), '#cv-content', :id => 'fullscreen', :rel => 'facebox', 'data-loadingimg' => image_path('facebox/loading.gif'), 'data-closeimg' => image_path('facebox/closelabel.gif')
-  %hr
-  #cv-content
-    %pre= @profile.cv
+- unless @profile.cv.blank?
+  #cv
+    %h3
+      = Profile.human_attribute_name :cv
+      = link_to t('.fullscreen'), '#cv-content', :id => 'fullscreen', :rel => 'facebox', 'data-loadingimg' => image_path('facebox/loading.gif'), 'data-closeimg' => image_path('facebox/closelabel.gif')
+    %hr
+    #cv-content
+      %pre= @profile.cv
 #logs
   %h3= t '.log'
   %hr
@@ -70,11 +99,11 @@
           &= log.operator ? log.operator.displayname : '-'
         .date= l log.created_at
         .clear-float
-      %dd
+      %dd(style="width:600px;overflow-x:auto;")
         - if log.feedback.blank?
           = t '.no_feedbacks'
         - else
-          &= log.feedback.content
+          %pre&= log.feedback.content
 
 -#------------------------------------------dialog
 = render :partial => 'shared/state_dialog'

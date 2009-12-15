@@ -1,36 +1,33 @@
 @import profiles/new
 @import facebox
 
-table
-  border-spacing: 5px 5px
-  font-size: 14px
-caption
-  background: #{image_url("img01.gif")} repeat-x left top
-  color: #FFFFFF
-  font-size: 1.6em
-  height: 42px
-  letter-spacing: -.5px
-  padding: 8px 0 0 20px
-  text-align: left
-th
-  text-align: right
-  width: 15%
-  label
-    text-transform: capitalize
-td
-  width: 35%
+#details
+  table
+    border:
+      spacing: 8px 8px
+  caption
+    background: #{image_url("img01.gif")} repeat-x left top
+    color: #FFFFFF
+    font-size: 1.6em
+    height: 42px
+    letter-spacing: -.5px
+    padding: 8px 0 0 20px
+    text-align: left
+  th
+    text-align: right
+    width: 15%
+    label
+      text-transform: capitalize
+  td
+    width: 35%
+
 #state
   line-height: 22px
-  #name
-    float: left
-    margin-right: 10px
-  li
-    margin-right: 5px
-  .event
-    background: #335ab8
-    color: #FFFFFF
-    cursor: pointer
-    width: 120px
+input.event
+  background: #335ab8
+  color: #FFFFFF
+  cursor: pointer
+  width: 120px
 #cv
   margin-bottom: 10px
   #cv-content

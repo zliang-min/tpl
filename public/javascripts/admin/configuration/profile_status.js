@@ -11,16 +11,29 @@ var onLoadCallback = (function() {
     return template;
   }
 
+  function addAStateTextField() {
+    var container = $('#statuses');
+    // we start from 0
+    $(statusTemplate(container.find('div').size())).appendTo(container);
+    var newlyAdded = container.find('input:last');
+    newlyAdded.focus();
+    return newlyAdded;
+  }
+
   function enableAddMoreButton() {
     $('#add_status').click(function() {
-      var container = $('#statuses');
-      // we start from 0
-      $(statusTemplate(container.find('div').size())).appendTo(container);
-      container.find('input:last').focus();
+      addAStateTextField();
+    });
+  }
+
+  function enableClickableLabels() {
+    $('label.state').dblclick(function() {
+      addAStateTextField().val($(this).text());
     });
   }
 
   return function() {
     enableAddMoreButton();
+    enableClickableLabels();
   };
 })();

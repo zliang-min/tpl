@@ -6,35 +6,49 @@
   = include_google_jsapi jquery: '1.3', jqueryui: '1.7'
 
 - #---------------------------------------- sidebar
-- sidebar t('tools') => [[t('.add'), new_position_profile_path(@position)]]
+:ruby
+  sidebar t('tools') => [
+    [t('.add'), new_position_profile_path(@position)],
+    [t('.close'), position_path(@position), {:id => 'link-close-position'}]
+  ]
 
 - #---------------------------------------- content
 .position
-  %h2 Position: #{@position.name}
+  %h2
+    %span Position: #{h @position.name}
+    = link_to_icon 'reply', t('.edit'), edit_position_path(@position), :action_name => 'edit-position'
   .summary
     %ul
-      %li Category: #{@position.category.name}
-      - unless @position.description
-        %li= @position.description
-      %li State: #{@position.state}
+      %li Category: #{h @position.category.name}
+      %li State: #{h @position.state}
+    - unless @position.description.blank?
+      %pre= h @position.description
 
 %h3 Profiles
 %table#profile-table
   %thead
     %tr
+      %td(colspan="4" style="text-align: right")
+        - if params[:show_all].blank?
+          = link_to t('.show_all'), position_profiles_path(@position, :show_all => true)
+        - else
+          = link_to t('.hide_closed'), position_profiles_path(@position)
+    %tr
       %th.name= t :name
       %th.state= t :state
-      %th.date= t :added_at
+      %th.date= t 'profile.assign_to'
       %th.operations= t :operations
   %tbody
     - @profiles.each do |profile|
       %tr{:id => "profile-#{profile.id}"}
-        %td= link_to h(profile.name), profile_path(profile)
+        %td= link_to h(profile.display_name), profile_path(profile)
         %td&= profile.state
-        %td= l profile.created_at, :format => :short
+        %td= assign_info(profile)
         %td= link_to t(:change_state), shift_profile_path(:id => profile.id), :class => 'event'
+= will_paginate @profiles, :params => {:show_all => params[:show_all]}
 - if @profiles.empty?
   %p.notice= t('.none')
 
 - #---------------------------------------- dialogs
 = render :partial => 'shared/state_dialog'
+= render :partial => 'positions/edit_dialog'

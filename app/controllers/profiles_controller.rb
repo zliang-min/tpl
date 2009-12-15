@@ -3,7 +3,9 @@ class ProfilesController < ApplicationController
   before_filter :find_position
 
   def index
-    @profiles = @position.profiles
+    @profiles = (
+      params[:show_all].blank? ? @position.not_closed_profiles : @position.profiles
+    ).paginate(:page => page, :per_page => per_page)
   end
 
   # GET /profiles/new
@@ -78,10 +80,10 @@ class ProfilesController < ApplicationController
     def find_position
       @position =
         if params[:position_id]
-          Position.find params[:position_id]
+          Position.active.find params[:position_id]
         elsif params[:profile] and (id = params[:profile][:position_id])
           # So that raises an exception if position doesn't exist.
-          Position.find id
+          Position.active.find id
         end
     end
 

@@ -9,10 +9,26 @@ en:
         add: add
         change_state: change state
   activerecord:
+    attributes:
+      profile:
+        assign_to: assigned to
+        birthday: birthday
+        channel: channel
+        chinese_name: chinese name
+        cv: CV
+        education: education
+        email: email
+        mobile_phone: mobile phone
+        name: name
+        state: state
+        work_experience: work experience
     errors:
-      messages:
+      models:
         profile:
-          picture:
-            invalid_content_type: only allows jpg, jpeg, png, gif and bmp images.
-          cv:
-            invalid_content_type: only allows doc, pdf, txt and html documents.
+          attributes:
+            cv:
+              invalid_content_type: only allows doc, pdf, txt and html documents.
+            mobile_phone:
+              invalid: only allows +,0-9,space,- and must contain more than 9 digits.
+            picture:
+              invalid_content_type: only allows jpg, jpeg, png, gif and bmp images.

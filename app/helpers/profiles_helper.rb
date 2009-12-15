@@ -6,29 +6,23 @@ module ProfilesHelper
   end
 
   def profile_state_select_tag(options={})
-    name = options.delete(:name) || 'profile[state]'
     option_tags = options_for_select Configuration.group('ProfileStatus').preferred_statuses
-    select_tag name, option_tags, options
+    select_tag(options[:name] || 'profile[state]', option_tags, options)
   end
 
-  def profile_events_links(profile)
-    unless (events = profile.state_events).blank?
-      content_tag 'ul', :class => 'horizontal' do
-        links = profile_event_link profile, events.shift
-        events.each do |event|
-          links << content_tag('li', '|', :class => 'separator')
-          links << profile_event_link(profile, event)
-        end
-        links
+  def assignable_users_select_tag(selected=nil, options={})
+    option_tags =
+      Configuration.group('LDAP').authorized_users.sort_by { |u| u.displayname.first }.
+      inject('') do |options, entry|
+        name, email = entry.displayname.first, entry.mail.first
+        options << %Q|<option value="#{email},#{name}"#{' selected="selected"' if name == selected}>#{name}</option>|
       end
-    end
+    select_tag(options[:name] || 'profile[assign_to]', option_tags, options)
   end
 
-  private
-  def profile_event_link(profile, event)
-    content_tag 'li' do
-      link_to event, handle_profile_path(:id => profile.id, :event => event), :class => 'event'
-    end
+  def assign_info(profile)
+    "#{h(profile.assign_to || 'nobody')} " \
+    "(#{(profile.assigned_at || profile.updated_at).distance})"
   end
 
 end

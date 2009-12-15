@@ -2,12 +2,12 @@
 = success_or_failure_message
 - form_tag admin_configuration_path(:id => conf_name) do
   %table
-    %caption&= t conf_name, :scope => 'admin.configurations'
+    %caption= t conf_name, :scope => 'admin.configurations'
     %tbody
       - configuration.preferences.each do |k, v|
         %tr
           %th
-            %label&= k
+            %label= t k, :scope => 'admin.configurations.edit'
           %td= text_field_tag "#{conf_name}[#{k}]", v, :id => "#{conf_name}_#{k}"
   #buttons
     = submit_tag t(:save)

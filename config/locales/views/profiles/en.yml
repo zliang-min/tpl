@@ -4,7 +4,11 @@ en:
   profiles:
     index:
       add: Add a new profile
+      close: Close this position
+      edit: edit this position
+      hide_closed: hide closed
       none: There are no profiles for this position yet.
+      show_all: show closed
       title: Create a profile
     show:
       detials: Profile details

@@ -1,0 +1,18 @@
+- conf_name = configuration.name
+= success_or_failure_message
+- form_tag admin_configuration_path(:id => conf_name) do
+  %table
+    %caption= t conf_name, :scope => 'admin.configurations'
+    %tbody
+      - preference_definitions = configuration.class.preference_definitions
+      - configuration.get(nil, current_user.email).each do |k, v|
+        %tr
+          %th
+            %label= t ".#{k}"
+          %td
+            - if preference_definitions[k].instance_variable_get(:@type) == 'boolean'
+              = check_box_tag "#{conf_name}[#{k}]", 'true', v, :id => "#{conf_name}_#{k}"
+            - else
+              = text_field_tag "#{conf_name}[#{k}]", v, :id => "#{conf_name}_#{k}"
+  #buttons
+    = submit_tag t(:save)

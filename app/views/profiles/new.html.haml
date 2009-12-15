@@ -23,16 +23,25 @@
         %tbody
           %tr
             %th
-              = f.label :name, t(:name)
+              = f.label :name, Profile.human_attribute_name(:name)
             %td
               = f.text_field :name
             %th
-              = f.label :name, t(:birthday)
+              = f.label :chinese_name, Profile.human_attribute_name(:chinese_name)
             %td
-              = f.text_field :birthday
+              = f.text_field :chinese_name
           %tr
             %th
-              = f.label :education, t(:education)
+              = f.label :mobile_phone, Profile.human_attribute_name(:mobile_phone)
+            %td
+              = f.text_field :mobile_phone
+            %th
+              = f.label :email, Profile.human_attribute_name(:email)
+            %td
+              = f.text_field :email
+          %tr
+            %th
+              = f.label :education, Profile.human_attribute_name(:education)
             %td
               = f.text_field :education
             %th
@@ -41,11 +50,20 @@
               = f.text_field :work_experience
           %tr
             %th
-              = f.label :assign_to, t('profile.assign_to')
+              = f.label :birthday, Profile.human_attribute_name(:birthday)
+            %td
+              = f.text_field :birthday
+            %th
+              = f.label :channel, Profile.human_attribute_name(:channel)
+            %td
+              = f.text_field :channel
+          %tr
+            %th
+              = f.label :assign_to, Profile.human_attribute_name(:assign_to)
             %td(colspan="3")
-              = f.text_field :assign_to
+              = assignable_users_select_tag(@position.creator && @position.creator.displayname)
     %fieldset
-      %legend= t 'profile.cv'
+      %legend= Profile.human_attribute_name :cv
       %table
         %tbody
           %tr

@@ -2,12 +2,20 @@
 en:
   admin:
     configurations:
+      Application: Personal Preferences
       ProfileStatus: Profile States
+      # --- partial: edit
+      application:
+        fold_positions: fold positions
+        per_page: items per page
+      # --- partial: profile_status
       profile_status:
-        states: states
         add_more: Add More
+        info: There are some special state names which have special effects on profiles. Name your state excatlly with the same name of these special state names to get the special effects. (You can double click on these names to do this.)
+        states: states
+      update:
         success: Changes saved successfully.
         failure: Changes saving failed. You may try it latter.
-      edit:
-        success: Changes saved successfully.
-        failure: Changes saving failed. You may try it latter.
+    home:
+      index:
+        preferences: Preferecnes

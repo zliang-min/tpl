@@ -80,8 +80,8 @@ function enableFacebox($) {
     settings: {
       opacity      : 0,
       overlay      : true,
-      loadingImage : '/facebox/loading.gif',
-      closeImage   : '/facebox/closelabel.gif',
+      loadingImage : '/images/facebox/loading.gif',
+      closeImage   : '/images/facebox/closelabel.gif',
       imageTypes   : [ 'png', 'jpg', 'jpeg', 'gif' ],
       faceboxHtml  : '\
     <div id="facebox" style="display:none;"> \
@@ -357,10 +357,11 @@ function enableFacebox($) {
     activeButtons();
     enableFacebox(jQuery);
     var fb = $('a[rel*=facebox]');
-    fb.facebox({
-      opacity: 20,
-      loadingImage: fb.attr('data-loadingimg'),
-      closeImage: fb.attr('data-closeimg')
-    });
+    if(fb.size() > 0)
+      fb.facebox({
+        opacity: 20,
+        loadingImage: fb.attr('data-loadingimg'),
+        closeImage: fb.attr('data-closeimg')
+      });
   }
 })();

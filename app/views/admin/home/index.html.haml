@@ -5,7 +5,7 @@
 -#-- sidebar --------------------------------------------
 :ruby
   sidebar(
-    t('configuration') => @configurations.map do |conf|
+    t('.preferences') => @configurations.map do |conf|
       [
         t(conf.name, :scope => 'admin.configurations'),
         admin_configuration_path(:id => conf.name)

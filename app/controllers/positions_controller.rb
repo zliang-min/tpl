@@ -3,7 +3,7 @@ class PositionsController < ApplicationController
   # GET /positions
   def index
     @categories = Category.all :order => :name
-    @positions  = Position.all :include => [:category, :profiles], :order => 'id DESC'
+    @positions  = Position.active.with_details.in_creation_order.paginate :page => page, :per_page => per_page
   end
 
   # POST /positions
@@ -14,7 +14,7 @@ class PositionsController < ApplicationController
     position.creator = current_user
 
     respond_to do |format|
-      if position.save
+      if position.save!
         format.json  {
           render(
             json: {
@@ -36,15 +36,45 @@ class PositionsController < ApplicationController
     end
   end
 
+  # GET /positions/1/edit
+  def edit
+    @position = Position.active.find params[:id]
+    @categories = Category.all :order => :name
+    render :partial => true if request.xhr?
+  end
+
+  # POST /positions/1
+  # POST /positions/1.json
+  def update
+    position = Position.active.find params[:id]
+    respond_to do |format|
+      if position.update_attributes params[:position]
+        format.json do
+          render :json => {
+            :position => {
+              :id       => position.id,
+              :name     => position.name,
+              :category => position.category.name,
+              :state    => position.state,
+              :description => position.description
+            }
+          }
+        end
+      else
+        format.json  { render :json => position.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /positions/1
   # DELETE /positions/1.json
   def destroy
-    @position = Position.find(params[:id])
-    @position.destroy
+    @position = Position.active.find(params[:id])
+    @position.close
 
     respond_to do |format|
       format.html { redirect_to(positions_url) }
-      format.json  { head :ok }
+      format.json { render :json => {:redirect_to => positions_url} }
     end
   end
 end

@@ -1,7 +1,7 @@
 -- # create database
 -- ## change the database name if neccessary
-CREATE DATABASE `reporting_production` DEFAULT CHARACTER SET `utf8`;
-use `reporting_production`;
+CREATE DATABASE `rms_production` DEFAULT CHARACTER SET `utf8`;
+use `rms_production`;
 
 -- # schema
 CREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB;

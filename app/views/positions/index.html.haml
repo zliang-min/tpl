@@ -58,10 +58,14 @@
 -#---------------------------------------- content
 %h2= t('.title')
 #positions
+  :ruby
+    fold_positions = Configuration.group('Application').get('fold_positions', current_user.email)
+    fold_link = link_to_icon(fold_positions ? 'maximize' : 'minimize', 'toggle', '#')
+    profiles_css_class = fold_positions ? 'hidden' : ''
   - @positions.each do |position|
-    .position
+    .position{:id => "position-#{position.id}"}
       %h3
-        = link_to_icon 'minimize', 'toggle', '#'
+        = fold_link
         %span.info
           %span.name&= position.name
           \-
@@ -69,10 +73,11 @@
           %span.state= " ( #{position.state} )"
         %ul.horizontal
           %li= link_to_icon 'folder_files', t('.details'), position_profiles_path(position), :action_name => 'show'
+          %li= link_to_icon 'reply', t('.edit'), edit_position_path(position), :action_name => 'edit'
           %li= link_to_icon 'action_add', t('.add_profile'), new_position_profile_path(position), :action_name => 'add'
         .clear-float
-      .profiles
-        - if position.profiles.blank?
+      .profiles{:class => profiles_css_class}
+        - if position.not_closed_profiles.blank?
           %p.notice= t '.no_profiles'
         - else
           %table
@@ -80,19 +85,21 @@
               %tr
                 %th= t :name
                 %th= t :state
-                %th= t :added_at
+                %th= t 'profile.assign_to'
                 %th= t :operations
             %tbody
-              - position.profiles.each_with_index do |profile, index|
+              - position.not_closed_profiles.each_with_index do |profile, index|
                 - break if index > 4
                 %tr{:id => "profile-#{profile.id}"}
-                  %td= link_to h(profile.name), profile_path(profile)
+                  %td= link_to h(profile.display_name), profile_path(profile)
                   %td= profile.state
-                  %td= l profile.created_at, :format => :short
+                  %td= assign_info(profile)
                   %td= link_to t(:change_state), shift_profile_path(:id => profile.id), :class => 'event'
+  = will_paginate @positions
  
 - if @positions.empty?
   %p.notice= t('.no_positions', :new_link => link_to(t(:here), new_position_path, id: 'tool-link-add-position-alt'))
 
 -#-------------------------------- dialogs
 = render :partial => 'shared/state_dialog'
+= render :partial => 'edit_dialog'

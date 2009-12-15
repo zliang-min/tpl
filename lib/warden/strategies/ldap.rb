@@ -9,27 +9,16 @@ Warden::Strategies.add(:ldap) do
   def authenticate!
     halt! # don't try any other strategies.
 
-    ldap = Net::LDAP.new \
-      :host => Configuration::LDAP[:host],
-      :base => Configuration::LDAP[:treebase]
-    mail = email
-    mail << "@#{Configuration::LDAP[:email_domain]}" unless mail['@']
-    ldap.auth mail, parameters[:password]
-    if ldap.bind
-      user_info = ldap.search(
-        :attributes => [Configuration::LDAP[:position_attribute].to_sym, :physicaldeliveryofficename, :displayname, :mail, :memberof],
-        :filter => Net::LDAP::Filter.eq('mail', mail)
-      ).first
-
-      fail! :invalid unless user_info.memberof.any? do |group|
-        group.split(',').any? { |prop| prop = 'CN=\\#GRP_NDPC_RMS_USER' }
+    ldap = Configuration.group('LDAP')
+    if user_info = ldap.find_authorized_user(email)
+      if ldap.authenticate!(user_info, parameters[:password])
+        user = User.create_or_update_from_ldap user_info
+        success! user
+      else
+        fail! :invalid
       end
-
-      user = User.create_or_update_from_ldap user_info
-        
-      success! user
     else
-      fail! :invalid
+      fail! :unauthorized
     end
   end
 

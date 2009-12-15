@@ -17,6 +17,15 @@
           - configuration.preferred_statuses.each_with_index do |status, ind|
             %div
               = text_field_tag "#{conf_name}[statuses][#{ind}]", h(status), :id => "#{conf_name}_statuses"
+        %td
+          .notice
+            .desc= t('.info')
+            %ul
+              - Configuration::ProfileStatus::SPECIAL_STATES.each_with_desc do |state, desc|
+                %li
+                  %label.state= state
+                  \-
+                  = t desc, :scope => 'models.configuration.profile_status'
   #buttons
     = submit_tag t(:save)
     %input#add_status{:type => "button", :value => t('.add_more')}

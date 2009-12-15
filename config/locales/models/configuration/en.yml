@@ -1,0 +1,6 @@
+---
+en:
+  models:
+    configuration:
+      profile_status:
+        auto_hide: Closed profiles will not show by default.

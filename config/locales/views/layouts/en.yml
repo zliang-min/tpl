@@ -2,4 +2,6 @@
 en:
   layouts:
     application:
-      admin: admin
+      positions: positions
+      preferences: preferences
+      profiles: profiles

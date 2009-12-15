@@ -7,4 +7,7 @@ class IndexController < ApplicationController
     flash.discard # remove login messages
   end
 
+  def search
+  end
+
 end
