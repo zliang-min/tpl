@@ -26,12 +26,12 @@ class Profile < ActiveRecord::Base
   validates_attachment_content_type :picture,
     :content_type => %r'image/(jpeg|png|gif|bmp)',
     :message => I18n.t('activerecord.errors.messages.profile.picture.invalid_content_type')
+=end
 
   has_attached_file :cv
   validates_attachment_content_type :cv,
     :content_type => [%r'application/(msword|pdf)', %r'text/(plain|html)'],
-    :message => I18n.t('activerecord.errors.messages.profile.cv.invalid_content_type')
-=end
+    :message => I18n.t('activerecord.errors.models.profile.attributes.cv.invalid_content_type')
 
   before_create :set_initial_state
   before_save   :set_assigned_at
@@ -98,6 +98,9 @@ class Profile < ActiveRecord::Base
   # @option [User] :by who did this operation
   # @option [String] :feedback feedback for this operation
   # @option [String] :to the destination state
+  # @option [Hash] :appointment
+  #   @option [String] :start_time
+  #   @option [String] :location
   # @return [Boolean] indicates if successfully save or not.
   def change_state(options={})
     self.assign_to = options[:assign_to] unless options[:assign_to].blank?
@@ -107,7 +110,14 @@ class Profile < ActiveRecord::Base
     feedback.strip! if feedback
     log.build_feedback :content => feedback unless feedback.blank?
     self.state = options[:to]
-    save
+    if save
+      if options[:appointment]
+        ProfileNotifier.deliver_appointment(log, options[:appointment])
+      end
+      true
+    else
+      false
+    end
   end
 
   # Returns the previous profile which belongs to the same position with this.

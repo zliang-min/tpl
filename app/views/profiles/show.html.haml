@@ -11,18 +11,24 @@
   shortcuts << ['back', position_profiles_path(@profile.position)]
 
   if p = @profile.previous_one
-    shortcuts << ['previous profile', profile_path(p)]
+    shortcuts << [t('.prev') + " (#{p.name})", profile_path(p)]
   else
-    shortcuts << 'previous profile'
+    shortcuts << t('.prev')
   end
 
   if p = @profile.next_one
-    shortcuts << ['next profile', profile_path(p)]
+    shortcuts << [t('.next') + " (#{p.name})", profile_path(p)]
   else
-    shortcuts << 'next profile'
+    shortcuts << t('.next')
   end
 
-  sidebar t(:shortcuts) => shortcuts
+  cv_links = []
+  cv_links << (@profile.cv.exists? ? cv_link(@profile) : t('.no_cv'))
+  sidebar [
+    [t(:tools), [[t('.edit'), edit_profile_path(@profile)]]],
+    [t(:shortcuts), shortcuts],
+    [Profile.human_attribute_name(:cv), cv_links]
+  ]
 
 -#---------------------------------------- content
 - if flash[:failure]
@@ -79,14 +85,15 @@
           = @profile.state
         %td
           %input{:type => 'button', :value => t(:change_state), 'data-href' => shift_profile_path(@profile), :class => 'event'}
-- unless @profile.cv.blank?
-  #cv
-    %h3
-      = Profile.human_attribute_name :cv
-      = link_to t('.fullscreen'), '#cv-content', :id => 'fullscreen', :rel => 'facebox', 'data-loadingimg' => image_path('facebox/loading.gif'), 'data-closeimg' => image_path('facebox/closelabel.gif')
-    %hr
-    #cv-content
-      %pre= @profile.cv
+-#
+  unless @profile.cv.blank?
+    #cv
+      %h3
+        = Profile.human_attribute_name :cv
+        = link_to t('.fullscreen'), '#cv-content', :id => 'fullscreen', :rel => 'facebox', 'data-loadingimg' => image_path('facebox/loading.gif'), 'data-closeimg' => image_path('facebox/closelabel.gif')
+      %hr
+      #cv-content
+        %pre= @profile.cv
 #logs
   %h3= t '.log'
   %hr

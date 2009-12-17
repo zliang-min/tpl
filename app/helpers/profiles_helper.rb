@@ -25,4 +25,21 @@ module ProfilesHelper
     "(#{(profile.assigned_at || profile.updated_at).distance})"
   end
 
+  def cv_link(profile)
+    cv = @profile.cv
+    name = truncate h(cv.original_filename)
+    css_class =
+      case cv.content_type
+      when /msword/
+        'word'
+      when /pdf/
+        'pdf'
+      when /html/
+        'html'
+      else
+        'file'
+      end
+    link_to name, cv.url, :class => "cv-link #{css_class}", :target => '_blank'
+  end
+
 end

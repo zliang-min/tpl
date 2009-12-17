@@ -1,0 +1,30 @@
+BEGIN:VCALENDAR
+PRODID:-//NURUN//NDPC RMS//EN
+VERSION:2.0
+METHOD:REQUEST
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VEVENT
+ATTENDEE;CN="<%= @profile.assign_to %>";RSVP=TRUE:mailto:<%= @profile.email_of_assigned_user %>
+CLASS:PUBLIC
+CREATED:<%= now = Time.zone.now.utc.strftime "%Y%m%dT%H%M%SZ" %>
+DESCRIPTION:<%= @feedback ? @feedback.inspect.gsub(/\A"|"\Z/, '') : '' %>\n
+  ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~\n
+  * Access this address <%= profile_url @profile %> to get more infomation about <%= @profile.name %>\n
+  ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~\n
+  * This message is automatically sent by http://<%= ActionMailer::Base.default_url_options[:host] %>
+DTEND:<%= (@dtstart + 1.hour).utc.strftime "%Y%m%dT%H%M%SZ" %>
+DTSTAMP:<%= now %>
+DTSTART:<%= @dtstart.utc.strftime "%Y%m%dT%H%M%SZ" %>
+LAST-MODIFIED:<%= now %>
+LOCATION:<%= @location.blank? ? 'unassigned' : @location %>
+ORGANIZER;CN="<%= @sender.displayname %>":mailto:<%= @sender.email %>
+PRIORITY:5
+SUMMARY;LANGUAGE=en-us:<%= @profile.state %> appointment with <%= @profile.name %>
+TRANSP:OPAQUE
+UID:profile-<%= @profile.id %>@rms.ndpc.nurun.com
+X-MICROSOFT-CDO-BUSYSTATUS:BUSY
+X-MICROSOFT-CDO-IMPORTANCE:1
+X-MICROSOFT-CDO-INTENDEDSTATUS:BUSY
+X-MS-OLK-CONFTYPE:0
+END:VEVENT
+END:VCALENDAR

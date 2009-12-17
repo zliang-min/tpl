@@ -8,9 +8,8 @@ ActionController::Routing::Routes.draw do |map|
       :conditions => { :method => :post }
   end
   map.resources :feedbacks
-  map.resources :profiles, :only => [:show, :create], :member => { :shift => :post }
-  #map.handle_profile '/profiles/:id/:event', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }
-  map.handle_profile_with_format '/profiles/:id/:event.:format', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }
+  map.resources :profiles, :only => [:show, :create, :update, :edit], :member => { :shift => :post }
+  #map.handle_profile_with_format '/profiles/:id/:event.:format', :controller => 'profiles', :action => 'handle', :conditions => { :method => :post }
 
   map.resources :positions do |r|
     r.resources :profiles

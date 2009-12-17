@@ -9,6 +9,7 @@
 :ruby
   sidebar t('tools') => [
     [t('.add'), new_position_profile_path(@position)],
+    [t('.edit'), edit_position_path(@position), {:class => 'icon-link-edit-position'}],
     [t('.close'), position_path(@position), {:id => 'link-close-position'}]
   ]
 

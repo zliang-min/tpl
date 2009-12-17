@@ -12,10 +12,16 @@ en:
       title: Create a profile
     show:
       detials: Profile details
+      edit: edit this profile
       fullscreen: (read in fullsreen)
       log: Operation Log
+      next: next profile
       no_cv: This profile has no CVs.
       no_feedbacks: '< No feedbacks left here >'
+      prev: previous profile
+      update_cv: update CV
     new:
       details: Profile details
       work_experience: work experience ( years )
+    edit:
+      details: Profile details

@@ -1,5 +1,5 @@
 #state-form.dialog.not-resizable{'data-dialog-title' => t(:change_state), 'data-dialog-width' => 960, 'data-dialog-height' => 600}
-  - form_tag do
+  - form_tag({}, :id => 'state-changing-form')do
     %table
       %tr
         %th
@@ -9,6 +9,20 @@
         %th
           %label(for="profile[assign_to]")= t('profile.assign_to')
         %td= assignable_users_select_tag(defined?(selected_user) && selected_user)
+      %tr
+        %td(colspan="2")
+          = t '.send_appointment'
+          = check_box_tag 'send_appointment', '1', false,  :id => 'appointment-switch'
+      %tr.appointment-fields.hidden
+        %th
+          %label= t '.when'
+        %td
+          = text_field_tag 'appointment[start_time]'
+      %tr.appointment-fields.hidden
+        %th
+          %label= t '.location'
+        %td
+          = text_field_tag 'appointment[location]'
       %tr
         %th
           %label(for="feedback[content]")= t(:feedback)

@@ -11,6 +11,8 @@
         <%= @log.feedback.content rescue "No feedback." %>
       </pre>
     </p>
+    <p>~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~ * ~~~~~</p>
+    <p>* This message is automatically sent by http://<%= ActionMailer::Base.default_url_options[:host] %></p>
     <p><div>Best regards,</div><div>Nurun RMS</div></p>
   </body>
 </html>

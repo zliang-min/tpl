@@ -1,12 +1,12 @@
 -#---------------------------------------- head
 - content_for :head do
-  = stylesheet_link_tag "profiles/new"
+  = stylesheet_link_tag "profiles/edit"
   = javascript_include_tag 'profiles/new'
   = include_google_jsapi jquery: '1.3'
 
 -#---------------------------------------- sidebar
 :ruby
-  link = position_profiles_path(@position)
+  link = profile_path(@profile)
   sidebar [
     [t(:tools), [
       link_to(t(:save), link, :id => 'tool-save'),
@@ -16,12 +16,11 @@
 
 -#---------------------------------------- content
 #profile
-  %h2 Position: #{@position.name}
+  %h2 Position: #{@profile.position.name}
   - form_for @profile, :html => {:id => 'profile_form', :multipart => true} do |f|
     %fieldset
       %legend= t '.details'
       = f.error_messages
-      = f.hidden_field :position_id, :value => @position.id
       %table
         %tbody
           %tr
@@ -62,26 +61,12 @@
               = f.text_field :channel
           %tr
             %th
-              = f.label :assign_to, Profile.human_attribute_name(:assign_to)
-            %td
-              = assignable_users_select_tag(@position.creator && @position.creator.displayname)
-            %th
               = f.label :cv, Profile.human_attribute_name(:cv)
-            %td
-              = f.file_field :cv
-    -#
-      %fieldset
-        %legend= Profile.human_attribute_name :cv
-        %table
-          %tbody
-            %tr
-              %td
-                = f.text_area :cv, :class => 'cv'
-    - f.fields_for :feedbacks, Feedback.new do |feedback_fields|
-      %fieldset
-        %legend= t :feedback
-        %table
-          %tbody
-            %tr
-              %td(colspan="4")
-                = feedback_fields.text_area :content, :class => 'feedback'
+            %td(colspan="3")
+              - if @profile.cv.exists?
+                %div
+                  = cv_link @profile
+                %div
+                  = f.file_field :cv
+              - else
+                = f.file_field :cv

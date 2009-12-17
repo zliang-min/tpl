@@ -1,0 +1,7 @@
+---
+en:
+  shared:
+    state_dialog:
+      send_appointment: send an appointment?
+      when: time
+      location: location
