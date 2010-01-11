@@ -21,7 +21,10 @@ en:
       prev: previous profile
       update_cv: update CV
     new:
+      add_resume: add one more CV
       details: Profile details
       work_experience: work experience ( years )
     edit:
+      add_resume: add one more CV
       details: Profile details
+      work_experience: work experience ( years )

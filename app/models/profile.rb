@@ -30,8 +30,11 @@ class Profile < ActiveRecord::Base
 
   has_attached_file :cv
   validates_attachment_content_type :cv,
-    :content_type => [%r'application/(msword|pdf)', %r'text/(plain|html)'],
+    :content_type => [%r'application/(msword|pdf)', %r'application/vnd.openxmlformats-officedocument.wordprocessingml.document', %r'text/(plain|html)'],
     :message => I18n.t('activerecord.errors.models.profile.attributes.cv.invalid_content_type')
+
+  # In order not to mess things up, I kept cv and added resumes. So I needn't create another migration to transform all cv to resumes!
+  has_many :resumes, :dependent => :destroy
 
   before_create :set_initial_state
   before_save   :set_assigned_at
@@ -154,6 +157,31 @@ class Profile < ActiveRecord::Base
     end
   end
 
+  def assignment_info
+    "#{assign_to || 'nobody'} " \
+    "(#{(assigned_at || updated_at).distance})"
+  end
+
+  # resume helper methods
+  # make working with cv + resumes more easier.
+  # == begin ==
+  alias resume_collection resumes
+  def resumes
+    cv.exists? ? [cv] + resume_collection : resume_collection
+  end
+
+  alias resume_collection= resumes=
+  # Don't do any things that rely on the return value of this method unless you absolutly know what you're doing.
+  def resumes=(resumes)
+    return if resumes.blank?
+    resumes = resumes.to_a.sort! { |a, b| a.first.to_i <=> b.first.to_i } # considering we don't have too much resumes for a profile
+    self.cv = resumes.shift.last[:file] unless self.cv.exists?
+    resumes.each do |resume|
+      self.resume_collection.build resume.last
+    end
+  end
+  # == end ==
+
   private
   def validates_birthday_format
     value = birthday_before_type_cast || birthday
@@ -165,7 +193,7 @@ class Profile < ActiveRecord::Base
   def validates_mobile_phone_format
     value = mobile_phone_before_type_cast || mobile_phone
     unless value.blank?
-      unless value =~ PHONE_REGEX and value.gsub(/\D/, '').size > 9
+      unless value =~ PHONE_REGEX# and value.gsub(/\D/, '').size > 9
         errors.add(:mobile_phone, :invalid)
       end
     end

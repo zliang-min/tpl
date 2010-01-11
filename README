@@ -1,2 +1,2 @@
-# TODO
-- load javascripts(jquery, etc) directly from google instead of using google.load
+= knowing issues
+* /profiles/:id changing state doesn't add operation log (javascript)

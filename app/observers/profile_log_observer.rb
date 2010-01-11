@@ -3,7 +3,6 @@ class ProfileLogObserver < ActiveRecord::Observer
   def after_create(log)
     create_operation log
     send_mail log unless \
-      log.action == ProfileLog::ACTIONS[:new] ||
       log.operator.email == log.profile.email_of_assigned_user ||
       log.profile.email_of_assigned_user.blank?
   end

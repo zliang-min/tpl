@@ -4,3 +4,14 @@ en:
     category: department
     name: job title
     need: need
+  activerecord:
+    attributes:
+      position:
+        category: department
+        jd: JD
+    errors:
+      models:
+        position:
+          attributes:
+            jd:
+              invalid_content_type: only allows doc, pdf, txt and html documents.

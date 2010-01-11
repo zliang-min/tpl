@@ -1,0 +1,18 @@
+-#---------------------------------------- head
+- content_for :head do
+  = stylesheet_link_tag "positions/edit"
+  - include_javascript_smartly
+
+-#---------------------------------------- sidebar
+:ruby
+  link = back_url
+  sidebar [
+    [t(:actions), [
+      link_to(t(:save), link, :id => 'tool-save'),
+      link_to(t(:cancel), link, :id => 'tool-cancel')
+    ]]
+  ]
+
+-#---------------------------------------- content
+#profile
+  = render :partial => 'form'

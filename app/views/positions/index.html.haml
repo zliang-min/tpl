@@ -2,57 +2,12 @@
 - content_for :head do
   = stylesheet_link_tag "positions/index"
   = link_jqueryui_stylesheet 'humanity'
-  -# google_ajax_libs :jquery, :jqueryui
-  -# javascript_include_tag 'positions/index'
-  = smart_javascript_include_tag 'shared/state_form', :google => [:jqueryui]
+  - include_javascript_smartly :google => [:jqueryui]
 
 -#---------------------------------------- sidebar
-- position_form = capture do
-  - form_for Position.new do |f|
-    %fieldset
-      %legend= t '.position_form_legend'
-      .label
-        = f.label :category_id, t('position.category')
-        = link_to_icon 'action_add', t('.add_category'), new_category_path, :action_name => 'add-category'
-      .input
-        = f.select :category_id, @categories.map { |c| [c.name, c.id] }
-      .label
-        = f.label :name, t('position.name')
-      .input
-        = f.text_field :name
-      .label
-        = f.label :description,  t(:description)
-      .input
-        = f.text_area :description
-      .label
-        = f.label :need, t('position.need')
-      .input
-        = f.text_field :need
-      .input
-        = submit_tag t('save')
-        %input.cancel{:type => "button", :value => t('cancel')}
-
-- category_form = capture do
-  - form_for Category.new do |f|
-    %fieldset
-      %legend= t '.category_form_legend'
-      .label
-        = f.label :name, t(:name)
-      .input
-        = f.text_field :name
-      .label
-        = f.label :description, t(:description)
-      .input
-        = f.text_area :description
-      .input
-        = submit_tag t('save')
-        %input.cancel{:type => "button", :value => t('cancel')}
-
 :ruby
-  sidebar t('tools') => [
-    [t('.add_position'), new_position_path, {id: 'tool-link-add-position'}],
-    [position_form, {class: 'form', id: 'position-form'}],
-    [category_form, {class: 'form', id: 'category-form'}]
+  sidebar t('actions') => [
+    [t('.add_position'), new_position_path],
   ]
 
 -#---------------------------------------- content
@@ -93,13 +48,12 @@
                 %tr{:id => "profile-#{profile.id}"}
                   %td= link_to h(profile.display_name), profile_path(profile)
                   %td= profile.state
-                  %td= assign_info(profile)
-                  %td= link_to t(:change_state), shift_profile_path(:id => profile.id), :class => 'event'
+                  %td&= profile.assignment_info
+                  %td= link_to t(:change_state), shift_profile_path(:id => profile.id), :class => 'event', 'data-state' => profile.state, 'data-assigned_to' => profile.read_attribute(:assign_to)
   = will_paginate @positions
  
 - if @positions.empty?
-  %p.notice= t('.no_positions', :new_link => link_to(t(:here), new_position_path, id: 'tool-link-add-position-alt'))
+  %p.notice= t('.no_positions', :new_link => link_to(t(:here), new_position_path))
 
 -#-------------------------------- dialogs
 = render :partial => 'shared/state_dialog'
-= render :partial => 'edit_dialog'

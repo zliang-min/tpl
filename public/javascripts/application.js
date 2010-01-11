@@ -37,7 +37,7 @@
 
     errorMsg: function(req) {
       try {
-        // error format: [['field_name#1', 'error message#1'], ... , ['field_name#N', 'error message#N']]
+        /* error format: [['field_name#1', 'error message#1'], ... , ['field_name#N', 'error message#N']] */
         var error = eval('(' + req.responseText + ')');
       } catch(e) {
         var error = []
@@ -49,7 +49,7 @@
       if( msg.length < 1 ) msg.push(this.exceptionMsg)
       return msg.join("\n");
     }
-  }); // end $.extend
+  }); /* end $.extend */
 
   if($.fn.dialog) {
     $.extend(nurun, {
@@ -79,11 +79,9 @@
           dialog('option', 'modal', d.hasClass('modal')).
           dialog('option', 'resizable', !d.hasClass('not-resizable'));
         });
-      },
+      }
     });
-  }
 
-  $(function() {
-    if(nurun.enableDialogs) nurun.enableDialogs();
-  });
+    $(nurun.enableDialogs);
+  }
 })(jQuery);

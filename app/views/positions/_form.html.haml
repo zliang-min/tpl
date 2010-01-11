@@ -1,0 +1,42 @@
+- form_for Category.new, :html => {:class => 'hidden'} do |f|
+  %fieldset
+    %legend= t '.category_form_legend'
+    .label
+      = f.label :name, Category.human_attribute_name(:name)
+    .input
+      = f.text_field :name
+    .label
+      = f.label :description, Category.human_attribute_name(:description)
+    .input
+      = f.text_area :description
+    .input
+      = submit_tag t('save'), :class => 'hidden'
+
+- form_for @position, :html => {:multipart => true, :id => 'position_form'} do |f|
+  %fieldset
+    %legend= t ".#{action_name}"
+    = hidden_field_tag 'back_url', back_url
+    = submit_tag t('save'), :class => 'hidden'
+    = f.error_messages
+    %table
+      %tbody
+        %tr
+          %th(style="line-height:40px")
+            = f.label :category_id, Position.human_attribute_name(:category)
+            = link_to_icon 'action_add', t('.add_category'), new_category_path, :action_name => 'add-category'
+          %td= f.select :category_id, Category.all(:order => 'name').map { |c| [c.name, c.id] }
+        %tr
+          %th= f.label :name, Position.human_attribute_name(:name)
+          %td= f.text_field :name
+        %tr
+          %th= f.label :description, Position.human_attribute_name(:description)
+          %td= f.text_area :description
+        %tr
+          %th= f.label :jd, t('.jd')
+          %td
+            - if @position.jd.exists?
+              %div= jd_link @position
+            = f.file_field :jd
+        %tr
+          %th= f.label :need, Position.human_attribute_name(:need)
+          %td= f.text_field :need

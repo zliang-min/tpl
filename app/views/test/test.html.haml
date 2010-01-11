@@ -1,0 +1,13 @@
+%h1 Params
+%p= params.inspect
+- form_tag '/test/test' do
+  - 4.times do |n|
+  = text_field_tag 'thing_0_name', '0_name', :name => 'thing[0][name]'
+  = text_field_tag 'thing_0_desc', '0_name', :name => 'thing[0][name]'
+  = text_field_tag 'thing_1_name', '1_name', :name => 'thing[1][name]'
+  = text_field_tag 'thing_1_desc', '1_name', :name => 'thing[1][name]'
+  = text_field_tag 'thing_2_name', '2_name', :name => 'thing[2][name]'
+  = text_field_tag 'thing_2_desc', '2_name', :name => 'thing[2][name]'
+  = text_field_tag 'thing_3_name', '3_name', :name => 'thing[3][name]'
+  = text_field_tag 'thing_3_desc', '3_name', :name => 'thing[3][name]'
+  = submit_tag

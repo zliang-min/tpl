@@ -2,16 +2,20 @@
 en:
   positions:
     index:
-      add_category: Add a new department
       add_position: Add a new position
       add_profile: add a new profile
       create_position: Add a position
-      details: detail infomation
       edit: edit position
       no_positions: We have no positions yet. Click {{new_link}} to create one.
       no_profiles: There are no profiles for this position yet.
-      position_form_legend: Please fill in position infomation
-      category_form_legend: Please fill in department infomation
       title: Positions
+    form:
+      add_category: Add a new department
+      category_form_legend: New Department
+      create: New Position
+      edit: Edit Position
+      jd: JD attachment
+      new: New Position
+      update: Edit Position
     edit_dialog:
       edit_position: Edit Position

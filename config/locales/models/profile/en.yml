@@ -32,3 +32,5 @@ en:
               invalid: only allows +,0-9,space,- and must contain more than 9 digits.
             picture:
               invalid_content_type: only allows jpg, jpeg, png, gif and bmp images.
+            resumes:
+              invalid: only allow doc, pdf, txt and html documents.

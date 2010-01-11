@@ -4,6 +4,13 @@ class PositionsController < ApplicationController
   def index
     @categories = Category.all :order => :name
     @positions  = Position.active.with_details.in_creation_order.paginate :page => page, :per_page => per_page
+    @position   = Position.new # for position form
+  end
+
+  # GET /positions/new
+  def new
+    @position = Position.new
+    render :action => :edit
   end
 
   # POST /positions
@@ -14,24 +21,10 @@ class PositionsController < ApplicationController
     position.creator = current_user
 
     respond_to do |format|
-      if position.save!
-        format.json  {
-          render(
-            json: {
-              position: {
-                id: position.id,
-                name: position.name,
-                category: position.category.name,
-                state: position.state,
-                profiles_link: position_profiles_path(position),
-                new_profile_link: new_position_profile_path(position)
-              }
-            },
-            status: :created
-          )
-        }
+      if position.save
+        format.html { redirect_to :action => :index }
       else
-        format.json  { render :json => position.errors, :status => :unprocessable_entity }
+        format.html { @position = position; render :action => :edit }
       end
     end
   end
@@ -49,6 +42,7 @@ class PositionsController < ApplicationController
     position = Position.active.find params[:id]
     respond_to do |format|
       if position.update_attributes params[:position]
+        format.html { redirect_to params[:back_url] }
         format.json do
           render :json => {
             :position => {
@@ -61,6 +55,10 @@ class PositionsController < ApplicationController
           }
         end
       else
+        format.html do 
+          @position = position
+          render :action => :edit
+        end
         format.json  { render :json => position.errors, :status => :unprocessable_entity }
       end
     end

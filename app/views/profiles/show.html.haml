@@ -2,13 +2,11 @@
 - content_for :head do
   = stylesheet_link_tag "profiles/show"
   = link_jqueryui_stylesheet 'humanity'
-  = javascript_include_tag 'profiles/show'
-  = include_google_jsapi jquery: '1.3', jqueryui: '1.7'
+  - include_javascript_smartly :google => :jqueryui
 
 -#---------------------------------------- sidebar
 :ruby
   shortcuts = []
-  shortcuts << ['back', position_profiles_path(@profile.position)]
 
   if p = @profile.previous_one
     shortcuts << [t('.prev') + " (#{p.name})", profile_path(p)]
@@ -23,9 +21,12 @@
   end
 
   cv_links = []
-  cv_links << (@profile.cv.exists? ? cv_link(@profile) : t('.no_cv'))
+  cv_links << (@profile.resumes.blank? ? t('.no_cv') : cv_links(@profile))
   sidebar [
-    [t(:tools), [[t('.edit'), edit_profile_path(@profile)]]],
+    [t(:actions), [
+      [t('back'), position_profiles_path(@profile.position)],
+      [t('.edit'), edit_profile_path(@profile)]
+    ]],
     [t(:shortcuts), shortcuts],
     [Profile.human_attribute_name(:cv), cv_links]
   ]
@@ -76,15 +77,15 @@
       %tr
         %th
           %label= Profile.human_attribute_name :assign_to
-        %td(colspan="3")
-          = assign_info(@profile)
+        %td#assignment-info(colspan="3")
+          &= @profile.assignment_info
       %tr
         %th
           %label= Profile.human_attribute_name :state
         %td#state(colspan="2")
           = @profile.state
         %td
-          %input{:type => 'button', :value => t(:change_state), 'data-href' => shift_profile_path(@profile), :class => 'event'}
+          %input{:type => 'button', :value => t(:change_state), 'data-href' => shift_profile_path(@profile), :class => 'event', 'data-state' => @profile.state, 'data-assigned_to' => @profile.read_attribute(:assign_to)}
 -#
   unless @profile.cv.blank?
     #cv

@@ -1,4 +1,3 @@
-// ********* loadmask ************
 /**
  * Copyright (c) 2009 Sergiy Kovalchuk (serg472@gmail.com)
  * 
@@ -28,13 +27,13 @@
 		
 		var maskDiv = $('<div class="loadmask"></div>');
 		
-		//auto height fix for IE
+		/*auto height fix for IE*/
 		if(navigator.userAgent.toLowerCase().indexOf("msie") > -1){
 			maskDiv.height(this.height() + parseInt(this.css("padding-top")) + parseInt(this.css("padding-bottom")));
 			maskDiv.width(this.width() + parseInt(this.css("padding-left")) + parseInt(this.css("padding-right")));
 		}
 		
-		//fix for z-index bug with selects in IE6
+		/*fix for z-index bug with selects in IE6*/
 		if(navigator.userAgent.toLowerCase().indexOf("msie 6") > -1){
 			this.find("select").addClass("masked-hidden");
 		}
@@ -46,7 +45,7 @@
 			maskMsgDiv.append('<div>' + label + '</div>');
 			this.append(maskMsgDiv);
 			
-			//calculate center position
+			/*calculate center position*/
 			maskMsgDiv.css("top", Math.round(this.height() / 2 - (maskMsgDiv.height() - parseInt(maskMsgDiv.css("padding-top")) - parseInt(maskMsgDiv.css("padding-bottom"))) / 2)+"px");
 			maskMsgDiv.css("left", Math.round(this.width() / 2 - (maskMsgDiv.width() - parseInt(maskMsgDiv.css("padding-left")) - parseInt(maskMsgDiv.css("padding-right"))) / 2)+"px");
 			

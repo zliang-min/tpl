@@ -1,37 +1,13 @@
-var onLoadCallback = (function() {
-
-  function enableDialogs() {
-    $('.dialog').dialog({
-      autoOpen: false,
-      buttons: {
-        Cancel: function() { $(this).dialog('close') },
-        OK: submitForm
-      },
-      open: function() { $(this).find('form').get(0).reset() }
-    }).each(function() {
-      var d = $(this);
-      d.dialog('option', 'title', d.attr('data-dialog-title')).
-      dialog('option', 'height', parseInt(d.attr('data-dialog-height'))).
-      dialog('option', 'width', parseInt(d.attr('data-dialog-width'))).
-      dialog('option', 'modal', d.hasClass('modal')).
-      dialog('option', 'resizable', !d.hasClass('not-resizable'));
+(function() {
+  $(function() {
+    $$.activeStateChangingDialog({
+      link: 'input.event',
+      urlAttr: 'data-href',
+      onSuccess: function(data) {
+        $('#state').text(data.profile.state);
+        $('#assignment-info').text(data.profile.assignment_info);
+        /* TODO operation log */
+      }
     });
-  }
-
-  function submitForm() {
-    $(this).find('form').submit();
-  }
-
-  function activeButtons() {
-    $('input.event').click(function() {
-      $('#state-form').find('form').
-        attr('action', $(this).attr('data-href')).end().
-        dialog('open');
-    });
-  }
-
-  return function() {
-    enableDialogs();
-    activeButtons();
-  }
+  });
 })();

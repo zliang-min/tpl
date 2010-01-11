@@ -1,7 +1,5 @@
 -# --- head ---------------------------------
-- content_for :head do
-  = javascript_include_tag 'admin/configuration/profile_status'
-  = include_google_jsapi jquery: '1.3'
+- include_javascript_smartly
 
 -# --- content ------------------------------
 - conf_name = configuration.name

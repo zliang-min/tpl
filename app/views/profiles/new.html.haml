@@ -1,14 +1,13 @@
 -#---------------------------------------- head
 - content_for :head do
   = stylesheet_link_tag "profiles/new"
-  = javascript_include_tag 'profiles/new'
-  = include_google_jsapi jquery: '1.3'
+  - include_javascript_smartly
 
 -#---------------------------------------- sidebar
 :ruby
   link = position_profiles_path(@position)
   sidebar [
-    [t(:tools), [
+    [t(:actions), [
       link_to(t(:save), link, :id => 'tool-save'),
       link_to(t(:cancel), link)
     ]]
@@ -63,12 +62,15 @@
           %tr
             %th
               = f.label :assign_to, Profile.human_attribute_name(:assign_to)
-            %td
+            %td(colspan="3")
               = assignable_users_select_tag(@position.creator && @position.creator.displayname)
+          %tr
             %th
-              = f.label :cv, Profile.human_attribute_name(:cv)
-            %td
-              = f.file_field :cv
+              %label= Profile.human_attribute_name(:cv)
+            %td#resumes(colspan="3")
+              .resume_field= f.file_field :resumes, :name => 'profile[resumes][0][file]', :id => 'profile_resumes_0_file'
+              .input
+                %input{:type => "button", :id => "btn-add-resume", :value => t('.add_resume')}
     -#
       %fieldset
         %legend= Profile.human_attribute_name :cv

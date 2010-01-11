@@ -12,6 +12,11 @@ class Position < ActiveRecord::Base
   has_many :not_closed_profiles, :class_name => 'Profile',
     :conditions => ['state <> ?', Configuration.group('ProfileStatus').special_state_name_for(:closed)], :order => 'id DESC'
 
+  has_attached_file :jd
+  validates_attachment_content_type :jd,
+    :content_type => [%r'application/(msword|pdf)', %r'application/vnd.openxmlformats-officedocument.wordprocessingml.document', %r'text/(plain|html)'],
+    :message => I18n.t('activerecord.errors.models.position.attributes.jd.invalid_content_type')
+
   before_create :initialize_defaults
 
   # ---- named scopes -----

@@ -58,9 +58,17 @@ class ProfilesController < ApplicationController
 
   # POST /profiles/:id
   def update
+    deleted_resumes = {}
+    if resumes = params[:profile][:resumes]
+      resumes.each do |id, attrs|
+        deleted_resumes[id.to_i] = resumes.delete(id) if attrs[:_delete]
+      end
+    end
+
     profile = Profile.find params[:id]
     respond_to do |format|
       if profile.update_attributes params[:profile]
+        deleted_resumes.each { |id, attrs| (id == 0 ? profile.cv : profile.resume_collection.find_by_id(id)).destroy }
         # I'm considering should I create a profile log when a profile is updated? Hmmm....
         Operation.create \
           :operator => current_user,
@@ -90,7 +98,7 @@ class ProfilesController < ApplicationController
       )
         format.html { redirect_to :action => :show }
         format.json {
-          render :json => profile.to_json(:only => [:id, :state]), status: :ok
+          render :json => profile.to_json(:only => [:id, :state], :methods => :assignment_info), status: :ok
         }
       else
         format.html {

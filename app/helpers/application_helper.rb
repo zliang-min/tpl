@@ -7,26 +7,6 @@ module ApplicationHelper
     render :partial => 'shared/sidebar', :locals => {:boxes => boxes}
   end
 
-  def include_google_jsapi packages
-    callback = packages.delete(:callback) || 'onLoadCallback'
-    scripts = %Q'<script type="text/javascript" src="http://www.google.com/jsapi"></script>\n'
-    scripts << %Q'<script type="text/javascript">\n'
-    scripts << "//<![CDATA[\n"
-    scripts << packages.map do |p, o|
-      o = {:version => o} unless o.respond_to?(:keys)
-      version = o.delete :version
-      
-      if o.blank?
-        "google.load('#{p}', '#{version}');"
-      else
-        "google.load('#{p}', '#{version}', #{o.to_json});"
-      end
-    end.join
-
-    scripts << "google.setOnLoadCallback(#{callback});\n"
-    scripts << "//]]>\n</script>"
-  end
-
   def google_ajax_libs(*libs)
     libs = libs.first if libs.first.is_a?(Hash)
     libs.map do |lib, version|
@@ -48,22 +28,40 @@ module ApplicationHelper
     end.join("\n")
   end
 
-  # smart_javascript_include_tag 'shared/state_form', :google => [:jquery, :jqueryui]
+  # smart_javascript_include_tag 'shared/state_form', :google => [:jqueryui]
+  # It loads jquery, and application.js, and application/*.js, and controller/action.js by default.
   def smart_javascript_include_tag *sources
     options = sources.last.is_a?(Hash) ? sources.pop : {}
     output = ""
 
-    google_libs = options[:google] || []
+    google_libs = options.delete(:google) || []
+    google_libs = [google_libs] unless [Hash, Array].any?(&google_libs.method(:is_a?))
     google_libs.respond_to?(:unshift) and google_libs.unshift(:jquery) or google_libs[:jquery] = nil
     google_libs = [google_libs].flatten!
     output << google_ajax_libs(*google_libs)
 
     sources.unshift :app
-    sources << "#{controller.controller_path}/#{controller.action_name}"
-    sources << {:cache => "#{controller.controller_path}.#{controller.action_name}"}
+    #sources << "#{controller.controller_path}/#{controller.action_name}"
+    sources << {:cache => "#{controller.controller_path}.#{controller.action_name}"}.merge(options)
     output << javascript_include_tag(*sources)
 
     output
+  end
+
+  def include_all_needed_javascripts
+    if @all_needed_javascripts
+      smart_javascript_include_tag *@all_needed_javascripts
+    end
+  end
+
+  def include_javascript_smartly *sources
+    options = (@all_needed_javascripts ||= []).last.is_a?(Hash) ? @all_needed_javascripts.pop : {}
+    options.update sources.pop if sources.last.is_a?(Hash)
+    # TODO tricky! no matter if sources is empty, add the default path
+    # to do so, check every include_javascript_smartly
+    sources << template.path_without_format_and_extension if sources.empty?
+    @all_needed_javascripts.concat(sources).uniq!
+    @all_needed_javascripts << options
   end
 
   def link_jqueryui_stylesheet(theme = 'base')
@@ -93,5 +91,26 @@ module ApplicationHelper
       msg = t(msg) unless options.values_at(:t, :translate).include?(false)
       content_tag 'div', msg, :class => cssClass
     end
+  end
+
+  def attachment_link(attachment, options = {})
+    name = truncate h(attachment.original_filename)
+    (css_class = "attachment-link ") <<
+      case attachment.content_type
+      when /word/
+        'word'
+      when /pdf/
+        'pdf'
+      when /html/
+        'html'
+      else
+        'file'
+      end
+    (extra_class = options[:class]) && css_class << " #{extra_class}"
+    link_to name, attachment.url, :class => css_class, :target => '_blank'
+  end
+
+  def back_url
+    params[:back_url] || request.env["HTTP_REFERER"]
   end
 end

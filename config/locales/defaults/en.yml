@@ -2,10 +2,13 @@
 en:
 # Follow alphabet order
   added_at: added at
+  actions: actions
+  back: return back
   birthday: birthday
   cancel: cancel
   categories: departments
   copyright: Copyright (c) {{year}}  {{author}}. All rights reserved.
+  delete: delete
   description: description
   education: education
   email: email

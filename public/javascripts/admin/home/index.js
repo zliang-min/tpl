@@ -1,4 +1,4 @@
-var onLoadCallback = (function() {
+(function() {
   function statusTemplate(num) {
     var template =
       '<div>' +
@@ -13,7 +13,7 @@ var onLoadCallback = (function() {
 
   function addAStateTextField() {
     var container = $('#statuses');
-    // we start from 0
+    /* we start from 0 */
     $(statusTemplate(container.find('div').size())).appendTo(container);
     var newlyAdded = container.find('input:last');
     newlyAdded.focus();
@@ -32,8 +32,8 @@ var onLoadCallback = (function() {
     });
   }
 
-  return function() {
+  $(function() {
     enableAddMoreButton();
     enableClickableLabels();
-  };
+  });
 })();

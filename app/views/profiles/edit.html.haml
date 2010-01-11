@@ -1,14 +1,13 @@
 -#---------------------------------------- head
 - content_for :head do
   = stylesheet_link_tag "profiles/edit"
-  = javascript_include_tag 'profiles/new'
-  = include_google_jsapi jquery: '1.3'
+  - include_javascript_smartly 'profiles/new'
 
 -#---------------------------------------- sidebar
 :ruby
   link = profile_path(@profile)
   sidebar [
-    [t(:tools), [
+    [t(:actions), [
       link_to(t(:save), link, :id => 'tool-save'),
       link_to(t(:cancel), link)
     ]]
@@ -63,10 +62,8 @@
             %th
               = f.label :cv, Profile.human_attribute_name(:cv)
             %td(colspan="3")
-              - if @profile.cv.exists?
-                %div
-                  = cv_link @profile
-                %div
-                  = f.file_field :cv
-              - else
-                = f.file_field :cv
+              - unless @profile.resumes.blank?
+                = cv_links @profile, :with_delete => true
+              .resume_field= f.file_field :resumes, :name => 'profile[resumes][0][file]', :id => 'profile_resumes_0_file'
+              .input
+                %input{:type => "button", :id => "btn-add-resume", :value => t('.add_resume')}

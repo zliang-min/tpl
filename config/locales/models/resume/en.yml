@@ -1,0 +1,9 @@
+---
+en:
+  activerecord:
+    errors:
+      models:
+        resume:
+          attributes:
+            file:
+              invalid_content_type: only allows doc, pdf, txt and html documents.
